@@ -2,6 +2,7 @@ package net.theEvilReaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
+import net.theEvilReaper.bot.api.interaction.BotInteraction;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -13,12 +14,12 @@ import java.util.concurrent.TimeoutException;
  * @since 1.0.0
  **/
 
-public class BotInteraction implements net.theEvilReaper.bot.api.interaction.BotInteraction {
+public class BatoideaInteraction implements BotInteraction {
 
     private final LocalTeamspeakClientSocket socket;
     private final int botID;
 
-    public BotInteraction(LocalTeamspeakClientSocket socket, int botID) {
+    public BatoideaInteraction(LocalTeamspeakClientSocket socket, int botID) {
         this.socket = socket;
         this.botID = botID;
     }

@@ -2,7 +2,7 @@ package net.theEvilReaper.batoidea.database;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mongodb.client.MongoClient;
-import net.theEvilReaper.batoideas.user.TeamSpeakUser;
+import net.theEvilReaper.batoidea.user.TeamSpeakUser;
 import net.theEvilReaper.bot.api.Connectable;
 import net.theEvilReaper.bot.api.config.Config;
 

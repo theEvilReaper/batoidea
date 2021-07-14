@@ -1,6 +1,6 @@
 package net.theEvilReaper.batoidea.command.console;
 
-import net.theEvilReaper.batoideas.service.SupportService;
+import net.theEvilReaper.batoidea.service.SupportService;
 import net.theEvilReaper.bot.api.command.ConsoleCommand;
 import net.theEvilReaper.bot.api.console.Console;
 import org.jetbrains.annotations.NotNull;

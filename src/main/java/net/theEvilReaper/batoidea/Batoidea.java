@@ -9,6 +9,7 @@ import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import net.theEvilReaper.batoidea.console.BotConsoleService;
 import net.theEvilReaper.batoidea.database.RabbitService;
+import net.theEvilReaper.batoidea.interaction.BatoideaInteraction;
 import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.batoidea.interaction.InteractionFactory;
 import net.theEvilReaper.batoidea.listener.TeamSpeakListener;
@@ -18,7 +19,7 @@ import net.theEvilReaper.batoidea.service.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.service.SupportService;
 import net.theEvilReaper.batoidea.service.listener.ClientListener;
-import net.theEvilReaper.batoideas.user.UserService;
+import net.theEvilReaper.batoidea.user.UserService;
 import net.theEvilReaper.bot.api.BotState;
 import net.theEvilReaper.bot.api.IBot;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
@@ -195,7 +196,7 @@ public class Batoidea implements IBot {
             this.clientProvider = new ClientProvider(logger, teamspeakClient);
 
 
-            this.botInteraction = new net.theEvilReaper.batoidea.interaction.BotInteraction(teamspeakClient, botID);
+            this.botInteraction = new BatoideaInteraction(teamspeakClient, botID);
             this.supportService.setSocket(teamspeakClient);
             this.supportService.setUserInteraction(new ClientInteraction(teamspeakClient));
             onLoad();

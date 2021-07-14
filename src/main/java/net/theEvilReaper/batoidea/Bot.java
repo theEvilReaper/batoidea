@@ -5,7 +5,7 @@ import net.theEvilReaper.batoidea.config.BotConfig;
 import net.theEvilReaper.batoidea.service.ChannelProvider;
 import net.theEvilReaper.batoidea.service.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
-import net.theEvilReaper.batoideas.user.UserService;
+import net.theEvilReaper.batoidea.user.UserService;
 import net.theEvilReaper.bot.api.BotState;
 import net.theEvilReaper.bot.api.IBot;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;

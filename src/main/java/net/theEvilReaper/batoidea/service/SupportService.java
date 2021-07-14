@@ -7,7 +7,7 @@ import com.github.manevolent.ts3j.command.SingleCommand;
 import com.github.manevolent.ts3j.command.parameter.CommandSingleParameter;
 import com.github.manevolent.ts3j.protocol.ProtocolRole;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.batoideas.user.TeamSpeakUser;
+import net.theEvilReaper.batoidea.user.TeamSpeakUser;
 import net.theEvilReaper.bot.api.interaction.ChannelInteraction;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.service.IService;
