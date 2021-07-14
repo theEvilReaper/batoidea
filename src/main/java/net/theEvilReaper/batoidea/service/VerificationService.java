@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.service;
+package net.theEvilReaper.batoidea.service;
 
 import net.theEvilReaper.bot.api.service.Service;
 

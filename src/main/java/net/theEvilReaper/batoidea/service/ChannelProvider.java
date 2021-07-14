@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.service;
+package net.theEvilReaper.batoidea.service;
 
 import com.github.manevolent.ts3j.api.Channel;
 import net.theEvilReaper.bot.api.provider.IChannelProvider;

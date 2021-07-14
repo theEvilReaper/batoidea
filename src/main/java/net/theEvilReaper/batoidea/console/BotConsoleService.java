@@ -1,10 +1,10 @@
-package net.theEvilReaper.batoideas.console;
+package net.theEvilReaper.batoidea.console;
 
 import net.theEvilReaper.batoidea.Batoidea;
-import net.theEvilReaper.batoideas.command.console.ExitCommand;
-import net.theEvilReaper.batoideas.command.console.HelpCommand;
-import net.theEvilReaper.batoideas.command.console.NotifyCommand;
-import net.theEvilReaper.batoideas.command.console.UserCommand;
+import net.theEvilReaper.batoidea.command.console.ExitCommand;
+import net.theEvilReaper.batoidea.command.console.HelpCommand;
+import net.theEvilReaper.batoidea.command.console.NotifyCommand;
+import net.theEvilReaper.batoidea.command.console.UserCommand;
 import net.theEvilReaper.bot.api.command.ConsoleCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

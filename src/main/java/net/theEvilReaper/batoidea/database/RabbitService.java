@@ -1,11 +1,11 @@
-package net.theEvilReaper.batoideas.database;
+package net.theEvilReaper.batoidea.database;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import net.theEvilReaper.batoideas.database.exception.RabbitExceptionHandler;
-import net.theEvilReaper.batoideas.database.pojo.ServiceUpdate;
+import net.theEvilReaper.batoidea.database.exception.RabbitExceptionHandler;
+import net.theEvilReaper.batoidea.database.pojo.ServiceUpdate;
 import net.theEvilReaper.bot.api.Connectable;
 import net.theEvilReaper.bot.api.config.Config;
 import net.theEvilReaper.bot.api.database.broker.Publish;

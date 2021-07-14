@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.console;
+package net.theEvilReaper.batoidea.console;
 
 import net.theEvilReaper.bot.api.console.Console;
 import org.jetbrains.annotations.NotNull;

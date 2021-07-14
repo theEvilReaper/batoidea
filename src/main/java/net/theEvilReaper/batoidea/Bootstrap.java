@@ -1,6 +1,7 @@
 package net.theEvilReaper.batoidea;
 
-import net.theEvilReaper.batoideas.logging.BotLogger;
+
+import net.theEvilReaper.batoidea.logging.BotLogger;
 
 /**
  * @author theEvilReaper

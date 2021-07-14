@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.identity;
+package net.theEvilReaper.batoidea.identity;
 
 import com.github.manevolent.ts3j.identity.LocalIdentity;
 import net.theEvilReaper.bot.api.identity.Identity;

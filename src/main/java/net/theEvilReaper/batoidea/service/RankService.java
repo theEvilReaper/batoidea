@@ -1,9 +1,9 @@
-package net.theEvilReaper.batoideas.service;
+package net.theEvilReaper.batoidea.service;
 
 import com.github.manevolent.ts3j.api.Client;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import net.theEvilReaper.batoideas.interaction.InteractionFactory;
+import net.theEvilReaper.batoidea.interaction.InteractionFactory;
 import net.theEvilReaper.bot.api.interaction.GroupInteraction;
 import net.theEvilReaper.bot.api.interaction.InteractionType;
 import net.theEvilReaper.bot.api.provider.IClientProvider;

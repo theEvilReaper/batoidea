@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.service.listener;
+package net.theEvilReaper.batoidea.service.listener;
 
 import com.github.manevolent.ts3j.event.ClientJoinEvent;
 import com.github.manevolent.ts3j.event.ClientLeaveEvent;

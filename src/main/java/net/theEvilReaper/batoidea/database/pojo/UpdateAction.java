@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.database.pojo;
+package net.theEvilReaper.batoidea.database.pojo;
 
 /**
  * @author theEvilReaper

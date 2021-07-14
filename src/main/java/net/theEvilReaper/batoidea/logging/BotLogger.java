@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.logging;
+package net.theEvilReaper.batoidea.logging;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

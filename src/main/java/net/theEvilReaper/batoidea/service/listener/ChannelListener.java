@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.service.listener;
+package net.theEvilReaper.batoidea.service.listener;
 
 import com.github.manevolent.ts3j.api.Channel;
 import com.github.manevolent.ts3j.command.CommandException;

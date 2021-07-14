@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.database.exception;
+package net.theEvilReaper.batoidea.database.exception;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

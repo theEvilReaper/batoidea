@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.interaction;
+package net.theEvilReaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;

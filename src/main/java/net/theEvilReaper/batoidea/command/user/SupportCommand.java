@@ -2,8 +2,8 @@ package net.theEvilReaper.batoidea.command.user;
 
 import com.github.manevolent.ts3j.api.Client;
 import net.theEvilReaper.batoidea.Batoidea;
-import net.theEvilReaper.batoideas.interaction.ClientInteraction;
-import net.theEvilReaper.batoideas.service.SupportService;
+import net.theEvilReaper.batoidea.interaction.ClientInteraction;
+import net.theEvilReaper.batoidea.service.SupportService;
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.interaction.ChannelInteraction;
 import net.theEvilReaper.bot.api.interaction.InteractionType;

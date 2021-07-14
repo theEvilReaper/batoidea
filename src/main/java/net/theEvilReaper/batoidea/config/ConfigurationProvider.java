@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.config;
+package net.theEvilReaper.batoidea.config;
 
 
 import java.nio.charset.Charset;

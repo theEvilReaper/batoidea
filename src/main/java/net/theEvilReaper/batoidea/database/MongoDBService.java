@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.database;
+package net.theEvilReaper.batoidea.database;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mongodb.client.MongoClient;

@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.config;
+package net.theEvilReaper.batoidea.config;
 
 import net.theEvilReaper.bot.api.config.Config;
 import org.jetbrains.annotations.NotNull;

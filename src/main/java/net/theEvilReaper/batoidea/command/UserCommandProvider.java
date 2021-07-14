@@ -4,7 +4,7 @@ import com.github.manevolent.ts3j.api.Client;
 import net.theEvilReaper.batoidea.Batoidea;
 import net.theEvilReaper.batoidea.command.user.PongCommand;
 import net.theEvilReaper.batoidea.command.user.SupportCommand;
-import net.theEvilReaper.batoideas.interaction.ClientInteraction;
+import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.ConsoleCommand;
 import net.theEvilReaper.bot.api.interaction.InteractionType;

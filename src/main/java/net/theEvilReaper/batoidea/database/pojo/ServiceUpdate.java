@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoideas.database.pojo;
+package net.theEvilReaper.batoidea.database.pojo;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
