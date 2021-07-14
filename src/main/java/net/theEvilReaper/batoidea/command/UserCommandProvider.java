@@ -1,13 +1,8 @@
 package net.theEvilReaper.batoidea.command;
 
 import com.github.manevolent.ts3j.api.Client;
-import net.theEvilReaper.batoidea.Batoidea;
-import net.theEvilReaper.batoidea.command.user.PongCommand;
-import net.theEvilReaper.batoidea.command.user.SupportCommand;
-import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.ConsoleCommand;
-import net.theEvilReaper.bot.api.interaction.InteractionType;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,15 +22,6 @@ public class UserCommandProvider {
     private final Logger logger;
     private final Map<String, Command> userCommands;
     private final UserInteraction userInteraction;
-
-    @Deprecated(forRemoval = true)
-    public UserCommandProvider(Batoidea batoidea) {
-        this.logger = batoidea.getLogger();
-        this.userCommands = new HashMap<>();
-        this.userInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, ClientInteraction.class);
-        registerCommand("ping", new PongCommand(batoidea.getInteractionFactory()));
-        registerCommand("support", new SupportCommand(batoidea, batoidea.getSupportService()));
-    }
 
     public UserCommandProvider(Logger logger, UserInteraction userInteraction) {
         this.logger = logger;

@@ -7,6 +7,9 @@ import com.github.manevolent.ts3j.identity.LocalIdentity;
 import com.github.manevolent.ts3j.protocol.TS3DNS;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
+import net.theEvilReaper.batoidea.command.UserCommandProvider;
+import net.theEvilReaper.batoidea.command.user.PongCommand;
+import net.theEvilReaper.batoidea.command.user.SupportCommand;
 import net.theEvilReaper.batoidea.console.BotConsoleService;
 import net.theEvilReaper.batoidea.database.RabbitService;
 import net.theEvilReaper.batoidea.interaction.BatoideaInteraction;
@@ -24,6 +27,7 @@ import net.theEvilReaper.bot.api.BotState;
 import net.theEvilReaper.bot.api.IBot;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import net.theEvilReaper.bot.api.interaction.BotInteraction;
+import net.theEvilReaper.bot.api.interaction.InteractionType;
 import net.theEvilReaper.bot.api.provider.IChannelProvider;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
 import net.theEvilReaper.bot.api.service.ServiceRegistry;
@@ -66,6 +70,7 @@ public class Batoidea implements IBot {
     private final ServiceRegistry serviceRegistry;
     private final IChannelProvider channelProvider;
     private final IUserService userService;
+    private UserCommandProvider userCommandProvider;
     private AbstractInteractionFactory interactionFactory;
 
     private BotState state = BotState.STOPPED;
@@ -192,22 +197,30 @@ public class Batoidea implements IBot {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> stopping = true));
             setState(BotState.RUNNING);
 
-            this.interactionFactory = new InteractionFactory(teamspeakClient);
             this.clientProvider = new ClientProvider(logger, teamspeakClient);
+            this.interactionFactory = new InteractionFactory(teamspeakClient);
 
+            var interaction = interactionFactory.getInteraction(InteractionType.CLIENT, ClientInteraction.class);
 
+            this.userCommandProvider = new UserCommandProvider(logger, interaction);
             this.botInteraction = new BatoideaInteraction(teamspeakClient, botID);
             this.supportService.setSocket(teamspeakClient);
             this.supportService.setUserInteraction(new ClientInteraction(teamspeakClient));
             onLoad();
-            teamspeakClient.addListener(new TeamSpeakListener(this));
+            teamspeakClient.addListener(new TeamSpeakListener(this, userCommandProvider));
             teamspeakClient.addListener(new ClientListener(clientProvider, logger, botID));
             new BotConsoleService(logger, this);
+            registerCommands();
         }
 
         while (!stopping) {
             Thread.onSpinWait();
         }
+    }
+
+    private void registerCommands() {
+        userCommandProvider.registerCommand("ping", new PongCommand(getInteractionFactory()));
+        userCommandProvider.registerCommand("support", new SupportCommand(this, getSupportService()));
     }
 
     protected void onLoad() {

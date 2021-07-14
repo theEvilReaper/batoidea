@@ -25,10 +25,10 @@ public class TeamSpeakListener implements TS3Listener {
     private final UserCommandProvider userCommandProvider;
     private final ClientInteraction clientInteraction;
 
-    public TeamSpeakListener(Batoidea batoidea) {
+    public TeamSpeakListener(Batoidea batoidea, UserCommandProvider userCommandProvider) {
         this.batoidea = batoidea;
+        this.userCommandProvider = userCommandProvider;
         this.clientInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, ClientInteraction.class);
-        this.userCommandProvider = new UserCommandProvider(batoidea);
     }
 
     @Override
