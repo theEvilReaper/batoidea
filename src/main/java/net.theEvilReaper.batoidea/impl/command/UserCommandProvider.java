@@ -32,7 +32,6 @@ public class UserCommandProvider {
         this.userInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, ClientInteraction.class);
         registerCommand("ping", new PongCommand(batoidea.getInteractionFactory()));
         registerCommand("help", new HelpCommand(batoidea.getInteractionFactory()));
-        registerCommand("nick", new NickCommand(batoidea));
         registerCommand("info", new InfoCommand(batoidea.getInteractionFactory()));
         registerCommand("support", new SupportCommand(batoidea, batoidea.getSupportService()));
     }
