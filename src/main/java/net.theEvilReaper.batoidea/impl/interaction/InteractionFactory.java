@@ -26,6 +26,7 @@ public class InteractionFactory extends AbstractInteractionFactory {
     @Override
     public <T extends Interaction> T getInteraction(@NotNull InteractionType type, Class<T> clazzType) {
         var interaction = interactions[type.getId()];
+        //TODO: FIx that
         /*
         if (!interaction.getClass().getSimpleName().equals(clazzType.getSimpleName())) {
             throw new IllegalArgumentException("The given type and the clazz are not similar");
