@@ -26,14 +26,19 @@ public class UserCommandProvider {
     private final Map<String, Command> userCommands;
     private final UserInteraction userInteraction;
 
+    @Deprecated(forRemoval = true)
     public UserCommandProvider(Batoidea batoidea) {
         this.logger = batoidea.getLogger();
         this.userCommands = new HashMap<>();
         this.userInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, ClientInteraction.class);
         registerCommand("ping", new PongCommand(batoidea.getInteractionFactory()));
-        registerCommand("help", new HelpCommand(batoidea.getInteractionFactory()));
-        registerCommand("info", new InfoCommand(batoidea.getInteractionFactory()));
         registerCommand("support", new SupportCommand(batoidea, batoidea.getSupportService()));
+    }
+
+    public UserCommandProvider(Logger logger, UserInteraction userInteraction) {
+        this.logger = logger;
+        this.userInteraction = userInteraction;
+        this.userCommands = new HashMap<>();
     }
 
     /**
