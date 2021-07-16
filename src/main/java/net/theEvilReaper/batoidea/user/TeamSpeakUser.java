@@ -19,6 +19,8 @@ public class TeamSpeakUser implements User {
     private transient Locale locale;
     //TODO: Array....
     private transient int groupID;
+
+    private int channelID;
     private boolean verified;
 
     /**
@@ -29,6 +31,7 @@ public class TeamSpeakUser implements User {
     public TeamSpeakUser(@NotNull Client client) {
         this.client = client;
         this.locale = Locale.ENGLISH;
+        this.channelID = client.getChannelId();
     }
 
     /**
@@ -52,6 +55,16 @@ public class TeamSpeakUser implements User {
     }
 
     /**
+     * Set the current channel from the client.
+     * @param channelID The new channel id
+     */
+
+    @Override
+    public void setCurrentChannel(int channelID) {
+        this.channelID = channelID;
+    }
+
+    /**
      * Change the verified status. Standard value is false
      * @param verified If the player is verified as boolean
      */
@@ -69,6 +82,16 @@ public class TeamSpeakUser implements User {
     @Override
     public int getGroupID() {
         return groupID;
+    }
+
+    /**
+     * Returns the current channel id from the client.
+     * @return the given channel id
+     */
+
+    @Override
+    public int getChannelID() {
+        return channelID;
     }
 
     /**
