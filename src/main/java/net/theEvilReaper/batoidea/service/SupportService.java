@@ -1,19 +1,19 @@
 package net.theEvilReaper.batoidea.service;
 
-import com.github.manevolent.ts3j.api.Channel;
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.command.SingleCommand;
 import com.github.manevolent.ts3j.command.parameter.CommandSingleParameter;
 import com.github.manevolent.ts3j.protocol.ProtocolRole;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
+import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.batoidea.user.TeamSpeakUser;
-import net.theEvilReaper.bot.api.interaction.ChannelInteraction;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.service.IService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -21,35 +21,26 @@ import java.util.concurrent.TimeoutException;
 public class SupportService implements IService {
 
     private final String[] states = new String[]{"[OPEN]", "[CLOSED]"};
-    private final Map<Integer, TeamSpeakUser> supporter;
     private final CommandSingleParameter channelParameter;
-    private UserInteraction userInteraction;
-    private LocalTeamspeakClientSocket socket;
-    private final ChannelInteraction channelInteraction;
-    private final int channelID;
-    private Channel channel;
+    private final UserInteraction userInteraction;
+    private final Map<Integer, TeamSpeakUser> supporter;
+    private final int[] channelIDs;
+
     private boolean open;
 
-    public SupportService(ChannelInteraction channelInteraction, int channelID) {
-        this.channelInteraction = channelInteraction;
-        this.channelID = channelID;
+    public SupportService(ClientInteraction clientInteraction, int channelID, int afkChannel) {
+        this.userInteraction = clientInteraction;
+        this.channelIDs = new int[]{channelID, afkChannel};
         this.supporter = new HashMap<>();
         this.channelParameter = new CommandSingleParameter("cid" , Integer.toString(channelID));
-    }
-
-    public void setSocket(LocalTeamspeakClientSocket socket) {
-        this.socket = socket;
-    }
-
-    public void setUserInteraction(UserInteraction userInteraction) {
-        this.userInteraction = userInteraction;
     }
 
     public void notifySupporter() {
         if (supporter.isEmpty()) return;
 
         for (TeamSpeakUser value : supporter.values()) {
-            userInteraction.sendPrivateMessage(value.getClient(), "Someone needs support");
+            if (value.getClient().getChannelId() == getAfkChannel()) continue;
+            userInteraction.sendPrivateMessage(value.getClient(), "Someone joins the support channel");
         }
     }
 
@@ -61,11 +52,7 @@ public class SupportService implements IService {
         this.supporter.remove(clientID);
     }
 
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
-
-    public boolean changeChannelStatus() {
+    public boolean changeChannelStatus(LocalTeamspeakClientSocket socket) {
         this.open = !open;
         var command = buildCommand(open);
         try {
@@ -88,37 +75,27 @@ public class SupportService implements IService {
         return singleCommand;
     }
 
-    public boolean isOpen() {
-        return open;
-    }
-
-    public int getChannelID() {
-        return channelID;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         SupportService that = (SupportService) o;
-
-        return channelID == that.channelID;
+        return Arrays.equals(channelIDs, that.channelIDs);
     }
 
     @Override
     public int hashCode() {
-        return channelID;
+        return Arrays.hashCode(channelIDs);
     }
 
     @Override
     public void setReady(boolean ready) {
-
+        throw new UnsupportedOperationException("Not implemented for the support service");
     }
 
     @Override
     public boolean isReady() {
-        return false;
+        return true;
     }
 
     @Override
@@ -126,7 +103,30 @@ public class SupportService implements IService {
         return "SupportService";
     }
 
-    public Channel getChannel() {
-        return channel;
+    /**
+     * Returns if the channel is open or not.
+     * @return true when the channel is open otherwise false
+     */
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    /**
+     * Returns the channel id from the support channel.
+     * @return The given channel id
+     */
+
+    public int getChannelID() {
+        return channelIDs[0];
+    }
+
+    /**
+     * Returns the id from the afk channel to ignore supporter in the specific channel.
+     * @return the id from the akf channel
+     */
+
+    public int getAfkChannel() {
+        return channelIDs[1];
     }
 }
