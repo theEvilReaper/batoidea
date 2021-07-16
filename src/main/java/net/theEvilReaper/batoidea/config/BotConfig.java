@@ -35,12 +35,6 @@ public class BotConfig extends Config {
         }
     }
 
-    @Override
-    public void reload() {
-
-    }
-
-    @Override
     public void save() {
         try (OutputStream outputStream = Files.newOutputStream(path)) {
             this.properties.store(outputStream, null);

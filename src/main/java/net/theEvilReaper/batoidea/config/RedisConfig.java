@@ -15,11 +15,6 @@ public class RedisConfig extends Config {
     }
 
     @Override
-    public void reload() {
-
-    }
-
-    @Override
     public void save() {
 
     }
