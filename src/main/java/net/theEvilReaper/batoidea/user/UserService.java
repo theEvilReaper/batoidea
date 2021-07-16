@@ -27,6 +27,14 @@ public class UserService implements IUserService {
         this.userMap.remove(clientID);
     }
 
+    public void updateChannel(int clientID, int newChannel) {
+        var user = this.userMap.get(clientID);
+
+        if (user == null) return;
+
+        user.setCurrentChannel(newChannel);
+    }
+
     @Override
     @Nullable
     public User getUser(int clientID) {
