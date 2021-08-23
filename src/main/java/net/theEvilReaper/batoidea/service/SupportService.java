@@ -8,6 +8,8 @@ import com.github.manevolent.ts3j.protocol.ProtocolRole;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.batoidea.user.TeamSpeakUser;
+import net.theEvilReaper.bot.api.database.IRedisEventManager;
+import net.theEvilReaper.bot.api.database.events.RTeamSpeakSupportEvent;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.service.IService;
 import org.jetbrains.annotations.NotNull;
@@ -20,12 +22,14 @@ import java.util.concurrent.TimeoutException;
 
 public class SupportService implements IService {
 
+    private static final RTeamSpeakSupportEvent event = new RTeamSpeakSupportEvent();
+
     private final String[] states = new String[]{"[OPEN]", "[CLOSED]"};
     private final CommandSingleParameter channelParameter;
     private final UserInteraction userInteraction;
     private final Map<Integer, TeamSpeakUser> supporter;
     private final int[] channelIDs;
-
+    private final IRedisEventManager iRedisEventManager;
     private boolean open;
 
     public SupportService(ClientInteraction clientInteraction, int channelID, int afkChannel) {
@@ -33,6 +37,7 @@ public class SupportService implements IService {
         this.channelIDs = new int[]{channelID, afkChannel};
         this.supporter = new HashMap<>();
         this.channelParameter = new CommandSingleParameter("cid" , Integer.toString(channelID));
+        this.iRedisEventManager = null;
     }
 
     public void notifySupporter() {
@@ -41,6 +46,7 @@ public class SupportService implements IService {
         for (TeamSpeakUser value : supporter.values()) {
             if (value.getClient().getChannelId() == getAfkChannel()) continue;
             userInteraction.sendPrivateMessage(value.getClient(), "Someone joins the support channel");
+            iRedisEventManager.callEvent(event);
         }
     }
 

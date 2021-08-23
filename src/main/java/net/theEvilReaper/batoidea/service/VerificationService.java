@@ -21,5 +21,4 @@ public class VerificationService extends Service {
     protected void update() {
 
     }
-
 }
