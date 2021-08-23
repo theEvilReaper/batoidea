@@ -8,6 +8,7 @@ import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.user.UserService;
 import net.theEvilReaper.bot.api.BotState;
 import net.theEvilReaper.bot.api.IBot;
+import net.theEvilReaper.bot.api.database.IRedisEventManager;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import net.theEvilReaper.bot.api.interaction.BotInteraction;
 import net.theEvilReaper.bot.api.provider.IChannelProvider;
@@ -16,6 +17,8 @@ import net.theEvilReaper.bot.api.service.ServiceRegistry;
 import net.theEvilReaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -63,6 +66,16 @@ public class Bot implements IBot {
 
 
         setState(BotState.RUNNING);
+    }
+
+    @Override
+    public void addChangeListener(@NotNull PropertyChangeListener listener) {
+
+    }
+
+    @Override
+    public void removeChangeListener(@NotNull PropertyChangeListener listener) {
+
     }
 
     @Override
@@ -137,5 +150,19 @@ public class Bot implements IBot {
     @Override
     public AbstractInteractionFactory getInteractionFactory() {
         return null;
+    }
+
+    @Override
+    public PropertyChangeSupport getStateChange() {
+        return null;
+    }
+
+    @Override
+    public IRedisEventManager getEventManager() {
+        return null;
+    }
+
+    public BotConfig getBotConfig() {
+        return botConfig;
     }
 }
