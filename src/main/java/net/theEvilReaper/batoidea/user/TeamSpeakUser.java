@@ -19,6 +19,7 @@ public class TeamSpeakUser implements User {
     private transient Locale locale;
     //TODO: Array....
     private transient int groupID;
+    private transient int[] groupIDs;
 
     private int channelID;
     private boolean verified;
@@ -32,6 +33,7 @@ public class TeamSpeakUser implements User {
         this.client = client;
         this.locale = Locale.ENGLISH;
         this.channelID = client.getChannelId();
+        this.groupIDs = client.getServerGroups();
     }
 
     /**
