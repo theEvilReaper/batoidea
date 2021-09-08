@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.theEvilReaper.bot.api.database.IRedisEventManager;
 import net.theEvilReaper.bot.api.database.REvent;
 import net.theEvilReaper.bot.api.database.RedisConnector;
+import net.theEvilReaper.bot.api.util.Conditions;
 import org.jetbrains.annotations.NotNull;
 import org.redisson.api.RFuture;
 import org.redisson.api.RTopic;
@@ -22,7 +23,7 @@ import java.util.function.Consumer;
 /**
  * @author theEvilReaper
  * @version 1.0.0
- * @since
+ * @since 1.0.0
  **/
 
 public class RedisEventManager implements IRedisEventManager {
@@ -46,7 +47,14 @@ public class RedisEventManager implements IRedisEventManager {
         this.mainTopic = redis.getConnection().getTopic("MainTopic");
     }
 
-    @Override
+    public RedisEventManager(RedisConnector redis, @NotNull  String topic) {
+        Conditions.checkForEmpty(topic);
+        this.redis = redis;
+        this.topicLock = new ReentrantLock();
+        this.listenerLock = new ReentrantLock();
+        this.mainTopic = redis.getConnection().getTopic(topic);
+    }
+
     public <T extends REvent> void registerListener(Class<T> eventType, Consumer<T> consumer) {
         listenerLock.lock();
         try {
