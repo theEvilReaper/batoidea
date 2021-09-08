@@ -41,10 +41,8 @@ public class RedisEventManager implements IRedisEventManager {
 
     public RedisEventManager(RedisConnector redis) {
         this.redis = redis;
-
         this.topicLock = new ReentrantLock();
         this.listenerLock = new ReentrantLock();
-        //TODO: define MainTopic name
         this.mainTopic = redis.getConnection().getTopic("MainTopic");
     }
 
