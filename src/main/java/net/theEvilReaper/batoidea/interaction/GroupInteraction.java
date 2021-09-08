@@ -14,13 +14,8 @@ import java.util.concurrent.TimeoutException;
  * @since
  **/
 
-public class GroupInteraction implements net.theEvilReaper.bot.api.interaction.GroupInteraction {
 
-    private final LocalTeamspeakClientSocket teamspeakClient;
-
-    public GroupInteraction(LocalTeamspeakClientSocket teamspeakClient) {
-        this.teamspeakClient = teamspeakClient;
-    }
+public record GroupInteraction(@NotNull LocalTeamspeakClientSocket teamspeakClient) implements net.theEvilReaper.bot.api.interaction.GroupInteraction {
 
     @Override
     public void addServerGroup(@NotNull Client client, int groupId) {

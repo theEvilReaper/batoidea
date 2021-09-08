@@ -5,6 +5,7 @@ import com.github.manevolent.ts3j.api.Permission;
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
+import net.theEvilReaper.bot.api.util.Conditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,17 +19,11 @@ import java.util.concurrent.TimeoutException;
  * @since 1.0.0
  **/
 
-public class ClientInteraction implements UserInteraction {
-
-    private final LocalTeamspeakClientSocket teamspeakClient;
-
-    public ClientInteraction(LocalTeamspeakClientSocket teamspeakClient) {
-        this.teamspeakClient = teamspeakClient;
-    }
+public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakClient) implements UserInteraction {
 
     @Override
     public void sendPrivateMessage(@NotNull Client client, @NotNull String message) {
-        checkString(message);
+        Conditions.checkForEmpty(message);
         try {
             teamspeakClient.sendPrivateMessage(client.getId(), message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
@@ -38,9 +33,12 @@ public class ClientInteraction implements UserInteraction {
 
     @Override
     public void moveToChannel(int channelId, @NotNull Client client, @Nullable String password) {
-        if (password != null && password.trim().isEmpty()) {
-            throw new IllegalArgumentException("The password can not be empty");
+        if (password == null) {
+            throw new IllegalArgumentException("The password can not be null");
         }
+
+        Conditions.checkForEmpty(password);
+
         try {
             teamspeakClient.clientMove(client.getId(), channelId, password);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
@@ -50,7 +48,7 @@ public class ClientInteraction implements UserInteraction {
 
     @Override
     public void kick(@NotNull Client client, @NotNull String message) {
-        checkString(message);
+        Conditions.checkForEmpty(message);
         try {
             teamspeakClient.kick(Collections.singletonList(client.getId()), message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
@@ -60,7 +58,7 @@ public class ClientInteraction implements UserInteraction {
 
     @Override
     public void pokeClient(int clientID, @NotNull String message) {
-        checkString(message);
+        Conditions.checkForEmpty(message);
         try {
             teamspeakClient.clientPoke(clientID, message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
@@ -83,12 +81,6 @@ public class ClientInteraction implements UserInteraction {
             teamspeakClient.clientDeletePermission(clientDatabaseID, permissions);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
-        }
-    }
-
-    public void checkString(@NotNull String string) {
-        if (string.trim().isEmpty()) {
-            throw new IllegalArgumentException("The message can not be empty");
         }
     }
 }

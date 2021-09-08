@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link InteractionFactory} is the implementation of the {@link AbstractInteractionFactory}.
- * The factory handles the instance of each interaction class from the project. It also reduce the instances from the
+ * The factory handles the instance of each interaction class from the project. It also reduces the instances from the
  * given interactions to one per typ. The factory provides a method to get the right {@link Interaction} for a use case.
  * @author theEvilReaper
  * @version 1.0.0
@@ -35,7 +35,7 @@ public class InteractionFactory extends AbstractInteractionFactory {
     /**
      * Get a specific implementation of the {@link Interaction} from the factory.
      * Note that a wrong clazzType throws an {@link IllegalArgumentException}
-     * @param type The type which implementation should be determine
+     * @param type The type which implementation should be determined
      * @param clazzType The implementation class from the {@link Interaction}
      * @param <T> The value must extends from the {@link Interaction}. Other types are not allowed
      * @return The determined {@link Interaction} implementation.
@@ -44,6 +44,12 @@ public class InteractionFactory extends AbstractInteractionFactory {
     @Override
     public <T extends Interaction> T getInteraction(@NotNull InteractionType type, Class<T> clazzType) {
         var interaction = interactions[type.getId()];
+
+        if (interaction == null) {
+            throw new IllegalArgumentException("Can't find a implementation for the given " + type.name());
+        }
+
+
 
         /*if (!interaction.getClass().isInstance(clazzType)) {
             throw new IllegalArgumentException("The given type and the clazz are not similar");
