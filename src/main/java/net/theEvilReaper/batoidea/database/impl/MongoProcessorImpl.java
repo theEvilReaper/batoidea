@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The class represents the implementation for the {@link AbstractMongoProcessor}.
- * The class needs an T reference which binds an specific object to the implementation
+ * The class needs an T reference which binds a specific object to the implementation
  *
  * @author theEvilReaper
  * @version 1.0.0
@@ -26,7 +26,7 @@ public class MongoProcessorImpl<T extends MongoModel> extends AbstractMongoProce
      * Creates a new instance from the {@link MongoProcessorImpl} with the given values.
      *
      * @param connector  An valid instance from the {@link MongoConnector}
-     * @param clazz      The T reference which binds an specific object to the class
+     * @param clazz      The T reference which binds a specific object to the class
      * @param collection The collection to access the data
      * @param database   The database where the objects are stored
      */
@@ -66,6 +66,11 @@ public class MongoProcessorImpl<T extends MongoModel> extends AbstractMongoProce
     public void update(T model) {
         this.datastore.save(model);
     }
+
+    /**
+     * Returns the given {@link Datastore}.
+     * @return the underlying store
+     */
 
     @Override
     public Datastore getDatastore() {
