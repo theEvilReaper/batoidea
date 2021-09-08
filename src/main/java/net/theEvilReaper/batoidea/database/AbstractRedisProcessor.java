@@ -2,6 +2,7 @@ package net.theEvilReaper.batoidea.database;
 
 import net.theEvilReaper.bot.api.database.RedisConnector;
 import net.theEvilReaper.bot.api.database.RedisProcessor;
+import net.theEvilReaper.bot.api.database.model.RedisModel;
 
 /**
  * @author theEvilReaper
@@ -9,7 +10,7 @@ import net.theEvilReaper.bot.api.database.RedisProcessor;
  * @since 1.0.0
  **/
 
-public abstract class AbstractRedisProcessor<K, V> implements RedisProcessor<K, V> {
+public abstract class AbstractRedisProcessor<K, V extends RedisModel> implements RedisProcessor<K, V> {
 
     protected final RedisConnector redisConnector;
 

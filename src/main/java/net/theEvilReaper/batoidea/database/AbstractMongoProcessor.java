@@ -2,6 +2,7 @@ package net.theEvilReaper.batoidea.database;
 
 import net.theEvilReaper.bot.api.database.MongoConnector;
 import net.theEvilReaper.bot.api.database.MongoProcessor;
+import net.theEvilReaper.bot.api.database.model.MongoModel;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.0.0
  **/
 
-public abstract class AbstractMongoProcessor<T> implements MongoProcessor<T> {
+public abstract class AbstractMongoProcessor<T extends MongoModel> implements MongoProcessor<T> {
 
     protected final MongoConnector connector;
     protected final String collection;
