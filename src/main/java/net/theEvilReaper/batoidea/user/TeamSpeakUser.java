@@ -17,9 +17,7 @@ public class TeamSpeakUser implements User {
 
     private transient final Client client;
     private transient Locale locale;
-    //TODO: Array....
-    private transient int groupID;
-    private transient int[] groupIDs;
+    private transient int[] groups;
 
     private int channelID;
     private boolean verified;
@@ -33,7 +31,7 @@ public class TeamSpeakUser implements User {
         this.client = client;
         this.locale = Locale.ENGLISH;
         this.channelID = client.getChannelId();
-        this.groupIDs = client.getServerGroups();
+        this.groups = client.getServerGroups();
     }
 
     /**
@@ -47,13 +45,13 @@ public class TeamSpeakUser implements User {
     }
 
     /**
-     * Set the group id from the user.
-     * @param groupID The id to set
+     * Set the group ids from the user.
+     * @param groups The id to set
      */
 
     @Override
-    public void setGroupID(int groupID) {
-        this.groupID = groupID;
+    public void setGroups(int... groups) {
+        this.groups = groups;
     }
 
     /**
@@ -77,13 +75,13 @@ public class TeamSpeakUser implements User {
     }
 
     /**
-     * Returns the group id from the user.
-     * @return the group id from the user
+     * Returns the group ids from the user.
+     * @return the group ids from the user
      */
 
     @Override
-    public int getGroupID() {
-        return groupID;
+    public int[] getGroups() {
+        return groups;
     }
 
     /**
