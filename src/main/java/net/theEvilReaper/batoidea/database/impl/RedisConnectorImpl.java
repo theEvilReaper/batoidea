@@ -1,6 +1,7 @@
 package net.theEvilReaper.batoidea.database.impl;
 
 import net.theEvilReaper.bot.api.database.RedisConnector;
+import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.redisson.Redisson;
@@ -38,7 +39,21 @@ public class RedisConnectorImpl implements RedisConnector {
         this.password = password;
         this.database = database;
         this.epoll = epoll;
+        this.connect();
+    }
 
+    /**
+     * Creates a new instance from the {@link RedisConnector} with the given values.
+     * @param server The host for the server
+     * @param password The password from the server
+     * @param database The database where the client should be use
+     */
+
+    public RedisConnectorImpl(@NotNull String server, @Nullable String password, int database) {
+        this.server = server;
+        this.password = password;
+        this.database = database;
+        this.epoll = SystemUtils.IS_OS_UNIX;
         this.connect();
     }
 
