@@ -33,6 +33,7 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
 
     @Override
     public void moveToChannel(int channelId, @NotNull Client client, @Nullable String password) {
+        //TODO: FIX ME
         if (password == null) {
             throw new IllegalArgumentException("The password can not be null");
         }
