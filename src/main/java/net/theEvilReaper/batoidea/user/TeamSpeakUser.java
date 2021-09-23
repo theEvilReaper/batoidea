@@ -17,9 +17,12 @@ public class TeamSpeakUser implements User {
 
     private transient final Client client;
     private transient Locale locale;
-    private transient int[] groups;
 
-    private int channelID;
+    //TODO: Main Group
+
+    private transient int[] groups;
+    private transient int channelID;
+
     private boolean verified;
 
     /**
@@ -72,6 +75,17 @@ public class TeamSpeakUser implements User {
     @Override
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    /**
+     * Set's a locale to the user.
+     * @param locale The locale to set
+     */
+
+
+    @Override
+    public void setLocale(Locale locale) {
+        this.locale = locale == null ? Locale.ENGLISH : locale;
     }
 
     /**
