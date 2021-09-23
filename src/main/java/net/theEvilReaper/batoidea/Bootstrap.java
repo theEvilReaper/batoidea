@@ -1,6 +1,5 @@
 package net.theEvilReaper.batoidea;
 
-
 import net.theEvilReaper.batoidea.logging.BotLogger;
 
 /**
@@ -18,15 +17,21 @@ public class Bootstrap {
         logger.info("Starting...");
         logger.info("Loading Config...");
 
-        logger.info("\n" +
-                "  ____                 ____        _   \n" +
-                " / __ \\               |  _ \\      | |  \n" +
-                "| |  | | __ _ ___  ___| |_) | ___ | |_ \n" +
-                "| |  | |/ _` / __|/ _ \\  _ < / _ \\| __|\n" +
-                "| |__| | (_| \\__ \\  __/ |_) | (_) | |_ \n" +
-                " \\____/ \\__,_|___/\\___|____/ \\___/ \\__|\n" +
-                "                                       ");
+
+        logger.info("""
+
+                 ____        _        _     _           \s
+                |  _ \\      | |      (_)   | |          \s
+                | |_) | __ _| |_ ___  _  __| | ___  __ _\s
+                |  _ < / _` | __/ _ \\| |/ _` |/ _ \\/ _` |
+                | |_) | (_| | || (_) | | (_| |  __/ (_| |
+                |____/ \\__,_|\\__\\___/|_|\\__,_|\\___|\\__,_|
+                """);
         logger.info("I am only an test bot. I have bugs lol");
+
+        if (args.length == 0) {
+            logger.info("Loading configs from runtime path");
+        }
 
         new Batoidea();
     }
