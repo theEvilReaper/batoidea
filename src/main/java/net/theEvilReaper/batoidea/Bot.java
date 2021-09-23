@@ -1,7 +1,8 @@
 package net.theEvilReaper.batoidea;
 
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.batoidea.config.BotConfig;
+import net.theEvilReaper.batoidea.config.FileConfig;
+import net.theEvilReaper.batoidea.interaction.InteractionFactory;
 import net.theEvilReaper.batoidea.service.ChannelProvider;
 import net.theEvilReaper.batoidea.service.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
@@ -28,11 +29,12 @@ public class Bot implements IBot {
 
     private final Logger logger = Logger.getLogger("BotLogger");
     private LocalTeamspeakClientSocket socket;
-    private final BotConfig botConfig;
+    private final FileConfig botConfig;
     private final ServiceRegistry serviceRegistry;
     private final IChannelProvider channelProvider;
     private final IClientProvider clientProvider;
     private final IUserService userService;
+    private final AbstractInteractionFactory interactionFactory;
 
     private BotInteraction botInteraction;
 
@@ -43,12 +45,15 @@ public class Bot implements IBot {
 
     protected int botID;
 
-    public Bot(@NotNull BotConfig botConfig) {
+    public Bot(@NotNull FileConfig botConfig) {
         this.botConfig = botConfig;
         this.serviceRegistry = new ServerRegistryImpl();
         this.channelProvider = new ChannelProvider();
         this.clientProvider = new ClientProvider(logger, null);
         this.userService = new UserService();
+
+        //TODO: Fix npe
+        this.interactionFactory = new InteractionFactory(socket);
     }
 
     @Override
@@ -89,7 +94,8 @@ public class Bot implements IBot {
         }
     }
 
-    protected void setState(BotState state) {
+    @Override
+    public void setState(@NotNull BotState state) {
         synchronized (this.stateLock) {
             if (this.state != state) {
                 logger.info("Change state " + this.state + " -> " + state);
@@ -149,7 +155,7 @@ public class Bot implements IBot {
 
     @Override
     public AbstractInteractionFactory getInteractionFactory() {
-        return null;
+        return interactionFactory;
     }
 
     @Override
@@ -162,7 +168,7 @@ public class Bot implements IBot {
         return null;
     }
 
-    public BotConfig getBotConfig() {
+    public FileConfig getBotConfig() {
         return botConfig;
     }
 }
