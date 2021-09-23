@@ -1,14 +1,15 @@
 package net.theEvilReaper.batoidea.listener;
 
-import com.github.manevolent.ts3j.api.TextMessageTargetMode;
 import com.github.manevolent.ts3j.event.TS3Listener;
 import com.github.manevolent.ts3j.event.TextMessageEvent;
 import net.theEvilReaper.batoidea.Batoidea;
 import net.theEvilReaper.batoidea.command.UserCommandProvider;
 import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.bot.api.interaction.InteractionType;
+import net.theEvilReaper.bot.api.provider.IClientProvider;
+import net.theEvilReaper.bot.api.util.Conditions;
 
-import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -19,33 +20,38 @@ import java.util.regex.Pattern;
 
 public class TeamSpeakListener implements TS3Listener {
 
-    private static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
+    private static final Logger logger = Logger.getLogger("BotLogger");
 
-    private final Batoidea batoidea;
+    private static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
+    private static final String COMMAND_SYMBOL = "!";
+
+    private final int botID;
     private final UserCommandProvider userCommandProvider;
+    private final IClientProvider clientProvider;
     private final ClientInteraction clientInteraction;
 
     public TeamSpeakListener(Batoidea batoidea, UserCommandProvider userCommandProvider) {
-        this.batoidea = batoidea;
+        this.botID = batoidea.getBotID();
         this.userCommandProvider = userCommandProvider;
+        this.clientProvider = batoidea.getClientProvider();
         this.clientInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, ClientInteraction.class);
     }
 
     @Override
     public void onTextMessage(TextMessageEvent event) {
-        if (event.getInvokerId() == batoidea.getBotID())
-            return; //Ignore our own sent messages
+        if (event.getInvokerId() == botID) return; //Ignore our own sent messages
+        if (!Conditions.isPrivatChannel(event.getTargetMode())) return;
 
-        if (event.getTargetMode() == TextMessageTargetMode.CHANNEL || event.getTargetMode() == TextMessageTargetMode.SERVER)
-            return;
-
-        var client = batoidea.getClientProvider().getClientById(event.getInvokerId());
+        var client = clientProvider.getClientById(event.getInvokerId());
 
         if (client == null) return;
 
-        batoidea.getLogger().log(Level.INFO, "Received message " + event.getMessage() + " from: " + client.getNickname());
-        if (event.getMessage().startsWith("!")) {
-            var split = SPLIT_PATTERN.split(event.getMessage().replaceFirst("!", ""));
+        var message = event.getMessage();
+
+        logger.info("Received message " + message + " from: " + client.getNickname());
+
+        if (event.getMessage().startsWith(COMMAND_SYMBOL)) {
+            var split = SPLIT_PATTERN.split(message.replaceFirst(COMMAND_SYMBOL, ""));
             String command = split[0];
             String[] args = new String[split.length - 1];
             if (split.length > 1) {
@@ -53,8 +59,7 @@ public class TeamSpeakListener implements TS3Listener {
             }
             userCommandProvider.dispatch(client, command, args);
         } else {
-            batoidea.getLogger().log(Level.INFO, "Received message without the right syntax");
-            clientInteraction.sendPrivateMessage(client, "I could not find the command: " + event.getMessage() + "Please type !help for help");
+            clientInteraction.sendPrivateMessage(client, "I could not find the command: " + message + "Please type !help for help");
         }
     }
 }
