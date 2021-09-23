@@ -3,6 +3,7 @@ package net.theEvilReaper.batoidea.interaction;
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
+import net.theEvilReaper.bot.api.interaction.GroupInteraction;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -14,8 +15,7 @@ import java.util.concurrent.TimeoutException;
  * @since
  **/
 
-
-public record GroupInteraction(@NotNull LocalTeamspeakClientSocket teamspeakClient) implements net.theEvilReaper.bot.api.interaction.GroupInteraction {
+public record ServerGroupInteraction(@NotNull LocalTeamspeakClientSocket teamspeakClient) implements GroupInteraction {
 
     @Override
     public void addServerGroup(@NotNull Client client, int groupId) {

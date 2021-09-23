@@ -17,13 +17,7 @@ import java.util.concurrent.TimeoutException;
  * @since 1.0.0
  **/
 
-public class ServerChannelInteraction implements ChannelInteraction {
-
-    private final LocalTeamspeakClientSocket socket;
-
-    public ServerChannelInteraction(LocalTeamspeakClientSocket socket) {
-        this.socket = socket;
-    }
+public record ServerChannelInteraction(LocalTeamspeakClientSocket socket) implements ChannelInteraction {
 
     @Override
     public void sendChannelMessage(int channelID, @NotNull String message) {
@@ -45,7 +39,7 @@ public class ServerChannelInteraction implements ChannelInteraction {
     }
 
     @Override
-    public void addChannelPermission(int channelID, @Nullable Permission... permissions) {
+    public void addChannelPermission(int channelID, @NotNull Permission... permissions) {
         try {
             socket.channelAddPermission(channelID, permissions);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
@@ -54,7 +48,7 @@ public class ServerChannelInteraction implements ChannelInteraction {
     }
 
     @Override
-    public void addChannelClientPermission(int channelID, int clientDatabaseID, @Nullable Permission... permissions) {
+    public void addChannelClientPermission(int channelID, int clientDatabaseID, @NotNull Permission... permissions) {
         try {
             socket.channelClientAddPermission(channelID, clientDatabaseID, permissions);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
@@ -63,7 +57,7 @@ public class ServerChannelInteraction implements ChannelInteraction {
     }
 
     @Override
-    public void removeChannelClientPermission(int channelID, int clientDatabaseID, @Nullable Permission... permissions) {
+    public void removeChannelClientPermission(int channelID, int clientDatabaseID, @NotNull Permission... permissions) {
         try {
             socket.channelClientDeletePermission(channelID, clientDatabaseID, permissions);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {

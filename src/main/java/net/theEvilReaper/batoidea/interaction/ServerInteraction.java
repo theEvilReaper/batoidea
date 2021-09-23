@@ -15,20 +15,14 @@ import java.util.concurrent.TimeoutException;
  * @since 1.0.0
  **/
 
-public class ServerInteraction implements GlobalInteraction {
-
-    private final LocalTeamspeakClientSocket teamspeakClient;
-
-    public ServerInteraction(LocalTeamspeakClientSocket teamspeakClient) {
-        this.teamspeakClient = teamspeakClient;
-    }
+public record ServerInteraction(LocalTeamspeakClientSocket clientSocket) implements GlobalInteraction {
 
     @Override
     public void broadcastMessage(@NotNull String message) {
         Conditions.checkForEmpty(message);
 
         try {
-            this.teamspeakClient.sendServerMessage(message);
+            this.clientSocket.sendServerMessage(message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
         }

@@ -27,7 +27,7 @@ public class InteractionFactory extends AbstractInteractionFactory {
     public InteractionFactory(LocalTeamspeakClientSocket socket) {
         this.interactions = new Interaction[InteractionType.getValues().length];
         this.interactions[0] = new ClientInteraction(socket);
-        this.interactions[1] = new GroupInteraction(socket);
+        this.interactions[1] = new ServerGroupInteraction(socket);
         this.interactions[2] = new ServerInteraction(socket);
         this.interactions[3] = new ServerChannelInteraction(socket);
     }
@@ -49,11 +49,9 @@ public class InteractionFactory extends AbstractInteractionFactory {
             throw new IllegalArgumentException("Can't find a implementation for the given " + type.name());
         }
 
-
-
-        /*if (!interaction.getClass().isInstance(clazzType)) {
-            throw new IllegalArgumentException("The given type and the clazz are not similar");
-        }*/
+        if (interaction.getClass() != clazzType) {
+            throw new IllegalArgumentException("The fetched class and the given clazz are not similar");
+        }
         return clazzType.cast(interaction);
     }
 }

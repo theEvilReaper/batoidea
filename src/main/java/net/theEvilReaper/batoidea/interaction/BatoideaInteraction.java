@@ -14,15 +14,7 @@ import java.util.concurrent.TimeoutException;
  * @since 1.0.0
  **/
 
-public class BatoideaInteraction implements BotInteraction {
-
-    private final LocalTeamspeakClientSocket socket;
-    private final int botID;
-
-    public BatoideaInteraction(LocalTeamspeakClientSocket socket, int botID) {
-        this.socket = socket;
-        this.botID = botID;
-    }
+public record BatoideaInteraction(@NotNull LocalTeamspeakClientSocket socket, int botID) implements BotInteraction {
 
     @Override
     public void sendChannelMessage(@NotNull String message) {
