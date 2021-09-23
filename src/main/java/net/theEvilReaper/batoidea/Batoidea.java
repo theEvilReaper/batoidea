@@ -42,6 +42,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 import java.util.Date;
@@ -91,20 +92,8 @@ public class Batoidea implements IBot {
     private IRedisEventManager iRedisEventManager;
 
     public Batoidea() {
-        var botLogger = new BotLogger();
         this.logger = Logger.getLogger("BotLogger");
         this.serviceRegistry = new ServerRegistryImpl();
-        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$td.%1$tm.%1$ty %1$tH:%1$tM:%1$tS] %4$s: %5$s%n");
-
-        logger.info("\n" +
-                "  ____                 ____        _   \n" +
-                " / __ \\               |  _ \\      | |  \n" +
-                "| |  | | __ _ ___  ___| |_) | ___ | |_ \n" +
-                "| |  | |/ _` / __|/ _ \\  _ < / _ \\| __|\n" +
-                "| |__| | (_| \\__ \\  __/ |_) | (_) | |_ \n" +
-                " \\____/ \\__,_|___/\\___|____/ \\___/ \\__|\n" +
-                "                                       ");
-        logger.info("I am only an test bot. I have bugs lol");
         this.userService = new UserService();
         this.channelProvider = new ChannelProvider();
         connect();
@@ -165,27 +154,30 @@ public class Batoidea implements IBot {
 
             List<InetSocketAddress> lookup = null;
 
-            try {
-                lookup = TS3DNS.lookup("trainingsoase.net");
+            /*try {
+                lookup = TS3DNS.lookup("116.202.179.207");
                 if (lookup.isEmpty()) {
                     logger.info("There is no valid ts dns for the given ip. Please check the config file");
                     System.exit(-1);
                     return;
                 }
             } catch (IOException exception) {
-                exception.printStackTrace();
-            }
+                logger.info("The given host is unknown. Please change the host");
+                System.exit(-1);
+            }*/
 
             setState(BotState.CONNECTING);
 
             try {
-                var address = lookup.get(0);
-                logger.info("Trying to connect to the host: " + address.toString());
-                teamspeakClient.connect(address, "", 5000L);
+                //var address = lookup.get(0);
+                //logger.info("Trying to connect to the host: " + address.toString());
+                teamspeakClient.connect(String.valueOf(new InetSocketAddress(InetAddress.getByName("116.202.179.207"), 9987)), 5000L);
+               // teamspeakClient.connect("116.202.179.207", "", 5000L);
                 logger.info("Waiting for the connected state");
                 teamspeakClient.waitForState(ClientConnectionState.CONNECTED, 5000L);
             } catch (IOException | TimeoutException | InterruptedException e) {
-                e.printStackTrace();
+                logger.info("Can't connect to the given host. Check IP");
+                System.exit(-1);
             }
 
             logger.info("Successfully connected to the server");
@@ -224,7 +216,7 @@ public class Batoidea implements IBot {
             this.botInteraction = new BatoideaInteraction(teamspeakClient, botID);
             onLoad();
             teamspeakClient.addListener(new TeamSpeakListener(this, userCommandProvider));
-            teamspeakClient.addListener(new ClientListener(clientProvider, logger, botID));
+            teamspeakClient.addListener(new ClientListener(clientProvider, userService, logger, botID));
             teamspeakClient.addListener(new SupportListener(botID, supportService, (UserService) userService));
             this.supportService = new SupportService(interaction, 7564, 7552);
             new BotConsoleService(logger, this);
@@ -318,7 +310,8 @@ public class Batoidea implements IBot {
         return stopping;
     }
 
-    private void setState(BotState state) {
+    @Override
+    public void setState(@NotNull BotState state) {
         synchronized (this.stateLock) {
             if (this.state != state) {
                 logger.info("Change state " + this.state + " -> " + state);
