@@ -23,7 +23,8 @@ public class BatoideaIdentity implements Identity {
 
     private LocalIdentity localIdentity;
 
-    public BatoideaIdentity(Logger logger, int securityLevel) {
+    public BatoideaIdentity(int securityLevel) {
+        var logger = Logger.getLogger("BotLogger");
         if (!Files.exists(path)) {
             logger.info("Can't find identity file. Creating new one");
 
