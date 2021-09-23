@@ -1,6 +1,5 @@
 package net.theEvilReaper.batoidea.config;
 
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -16,10 +15,6 @@ public class ConfigurationProvider {
 
     private static final Charset UTF8 = StandardCharsets.UTF_8;
     private static final String ENVIRONMENT = System.getProperty("user.dir");
-
-    private boolean generated;
-
-    public static String RESOURCE_PATH = "src/main/resources/";
 
     public ConfigurationProvider() {
         Path rootPath = Paths.get(ENVIRONMENT);
