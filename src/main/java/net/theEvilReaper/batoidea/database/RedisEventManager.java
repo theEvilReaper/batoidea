@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 /**
  * @author theEvilReaper
@@ -31,6 +32,7 @@ public class RedisEventManager implements IRedisEventManager {
     private static final TypeReference<Map<String, Object>> MAP_TOKEN = new TypeReference<>(){};
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    private final Logger logger;
     private final RedisConnector redis;
     private final Map<Class<? extends REvent>, List<Consumer<REvent>>> listeners = new HashMap<>();
     private final Map<Class<? extends REvent>, RTopic> topics = new HashMap<>();
@@ -40,15 +42,17 @@ public class RedisEventManager implements IRedisEventManager {
     private final ReentrantLock topicLock;
     private final ReentrantLock listenerLock;
 
-    public RedisEventManager(RedisConnector redis) {
+    public RedisEventManager(@NotNull RedisConnector redis) {
+        this.logger = Logger.getLogger("BotLogger");
         this.redis = redis;
         this.topicLock = new ReentrantLock();
         this.listenerLock = new ReentrantLock();
         this.mainTopic = redis.getConnection().getTopic("MainTopic");
     }
 
-    public RedisEventManager(RedisConnector redis, @NotNull  String topic) {
+    public RedisEventManager(@NotNull RedisConnector redis, @NotNull String topic) {
         Conditions.checkForEmpty(topic);
+        this.logger = Logger.getLogger("BotLogger");
         this.redis = redis;
         this.topicLock = new ReentrantLock();
         this.listenerLock = new ReentrantLock();
@@ -154,7 +158,8 @@ public class RedisEventManager implements IRedisEventManager {
                 }
             });
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
-            exception.printStackTrace();
+            //TODO: Check result in the log
+            logger.warning(exception.getLocalizedMessage());
         }
     }
 }
