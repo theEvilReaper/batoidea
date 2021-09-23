@@ -82,10 +82,20 @@ public class TeamSpeakUser implements User {
      * @param locale The locale to set
      */
 
-
     @Override
     public void setLocale(Locale locale) {
         this.locale = locale == null ? Locale.ENGLISH : locale;
+    }
+
+    /**
+     * Returns the main teamspeak group of the user.
+     * @return the current main group as id
+     */
+
+    @Override
+    public int getMainGroup() {
+        //TODO: FIX ME -> Return the right group
+        return 0;
     }
 
     /**
