@@ -15,13 +15,13 @@ import java.beans.PropertyChangeSupport;
  * @since
  **/
 
-public class PropertyEventDispatcher<T> implements PropertyEventCall<T> {
+public class PropertyEventDispatcher implements PropertyEventCall {
 
     private final PropertyChangeSupport propertyChangeSupport;
 
-    private final T source;
+    private final Object source;
 
-    public PropertyEventDispatcher(T source) {
+    public PropertyEventDispatcher(Object source) {
         this.source = source;
         this.propertyChangeSupport = createSupport();
     }
