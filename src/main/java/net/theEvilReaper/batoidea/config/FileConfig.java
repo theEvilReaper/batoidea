@@ -31,33 +31,45 @@ public class FileConfig extends Config implements BotConfig {
         this.configPath = Paths.get(directory, FILE_NAME);
     }
 
+    /**
+     * Loads the config {@link Properties}.
+     * A {@link Properties} will be created when there is no config available
+     */
+
     @Override
     public void load() {
       if (!Files.exists(configPath)) {
-            logger.info("No config found. Creating config from scratch");
+            this.logger.info("No config found. Creating config from scratch");
             this.generateDefaultConfig();
-            save();
+            this.save();
         } else {
-          logger.info("Loading config file");
+          this.logger.info("Loading config file");
           this.properties = new Properties();
-          try (InputStream inputStream = Files.newInputStream(configPath)) {
+          try (InputStream inputStream = Files.newInputStream(this.configPath)) {
                 this.properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-          logger.info("Config successfully loaded");
-          logger.info("The name of the bot is: " + getName());
+          this.logger.info("Config successfully loaded");
         }
     }
 
+    /**
+     * Writes the data into the config {@link Properties}.
+     */
+
     @Override
     public void save() {
-       try (OutputStream outputStream = Files.newOutputStream(configPath)) {
+       try (OutputStream outputStream = Files.newOutputStream(this.configPath)) {
             this.properties.store(outputStream, "This is the config for the bot");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
+
+    /**
+     * Generates a default config
+     */
 
     private void generateDefaultConfig() {
         this.properties = new Properties();
