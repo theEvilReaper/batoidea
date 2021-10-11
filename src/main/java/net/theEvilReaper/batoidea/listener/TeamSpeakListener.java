@@ -4,8 +4,8 @@ import com.github.manevolent.ts3j.event.TS3Listener;
 import com.github.manevolent.ts3j.event.TextMessageEvent;
 import net.theEvilReaper.batoidea.Batoidea;
 import net.theEvilReaper.batoidea.command.UserCommandProvider;
-import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.bot.api.interaction.InteractionType;
+import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
 import net.theEvilReaper.bot.api.util.Conditions;
 
@@ -28,13 +28,13 @@ public class TeamSpeakListener implements TS3Listener {
     private final int botID;
     private final UserCommandProvider userCommandProvider;
     private final IClientProvider clientProvider;
-    private final ClientInteraction clientInteraction;
+    private final UserInteraction clientInteraction;
 
     public TeamSpeakListener(Batoidea batoidea, UserCommandProvider userCommandProvider) {
         this.botID = batoidea.getBotID();
         this.userCommandProvider = userCommandProvider;
         this.clientProvider = batoidea.getClientProvider();
-        this.clientInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, ClientInteraction.class);
+        this.clientInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, UserInteraction.class);
     }
 
     @Override
