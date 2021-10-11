@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.command.console;
 
-import net.theEvilReaper.bot.api.command.ConsoleCommand;
-import net.theEvilReaper.bot.api.console.Console;
+import net.theEvilReaper.bot.api.command.Command;
+import net.theEvilReaper.bot.api.command.CommandSender;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
 import net.theEvilReaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
@@ -13,31 +13,31 @@ import org.jetbrains.annotations.Nullable;
  * @since
  **/
 
-public class UserCommand extends ConsoleCommand {
+public class UserCommand extends Command {
 
     private final IUserService iUserService;
     private final IClientProvider iClientProvider;
 
     public UserCommand(IUserService iUserService, IClientProvider iClientProvider) {
+        super("user");
         this.iUserService = iUserService;
         this.iClientProvider = iClientProvider;
     }
 
     @Override
-    public void execute(@NotNull Console console, @NotNull String command, @Nullable String... args) {
+    public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
         var users = iUserService.getUser();
 
-        console.sendMessage("Clients.");
+        sender.sendMessage("Clients.");
 
         try {
-            iClientProvider.getClients().forEach((integer, client) -> console.sendMessage("" + client.getNickname()));
+            iClientProvider.getClients().forEach((integer, client) -> sender.sendMessage("" + client.getNickname()));
         }catch (Exception exception) {
             exception.printStackTrace();
         }
 
-        console.sendMessage("TeamSpeakUser");
+        sender.sendMessage("TeamSpeakUser");
 
-        users.forEach((integer, user) -> console.sendMessage(user.getClient().getNickname()));
-
+        users.forEach((integer, user) -> sender.sendMessage(user.getClient().getNickname()));
     }
 }

@@ -1,8 +1,8 @@
 package net.theEvilReaper.batoidea.command.console;
 
 import net.theEvilReaper.batoidea.service.SupportService;
-import net.theEvilReaper.bot.api.command.ConsoleCommand;
-import net.theEvilReaper.bot.api.console.Console;
+import net.theEvilReaper.bot.api.command.Command;
+import net.theEvilReaper.bot.api.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,17 +12,18 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.0.0
  **/
 
-public class NotifyCommand extends ConsoleCommand {
+public class NotifyCommand extends Command {
 
     private final SupportService supportService;
 
     public NotifyCommand(SupportService supportService) {
+        super("notify");
         this.supportService = supportService;
     }
 
     @Override
-    public void execute(@NotNull Console console, @NotNull String command, @Nullable String... args) {
-        console.sendMessage("Notifying supporter");
+    public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
+        sender.sendMessage("Notifying supporter");
         supportService.notifySupporter();
     }
 }

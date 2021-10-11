@@ -1,8 +1,8 @@
 package net.theEvilReaper.batoidea.command.console;
 
 import net.theEvilReaper.batoidea.Batoidea;
-import net.theEvilReaper.bot.api.command.ConsoleCommand;
-import net.theEvilReaper.bot.api.console.Console;
+import net.theEvilReaper.bot.api.command.Command;
+import net.theEvilReaper.bot.api.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,17 +12,18 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.0.0
  **/
 
-public class ExitCommand extends ConsoleCommand {
+public class ExitCommand extends Command {
 
     private final Batoidea batoidea;
 
     public ExitCommand(Batoidea batoidea) {
+        super("exit");
         this.batoidea = batoidea;
     }
 
     @Override
-    public void execute(@NotNull Console console, @NotNull String command, @Nullable String... args) {
-        console.sendMessage("Shutting down");
+    public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
+        sender.sendMessage("Shutting down");
         batoidea.disconnect();
     }
 }

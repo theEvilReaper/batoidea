@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.command.console;
 
-import net.theEvilReaper.bot.api.command.ConsoleCommand;
-import net.theEvilReaper.bot.api.console.Console;
+import net.theEvilReaper.bot.api.command.Command;
+import net.theEvilReaper.bot.api.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,14 +11,14 @@ import org.jetbrains.annotations.Nullable;
  * @since
  **/
 
-public class HelpCommand extends ConsoleCommand {
+public class HelpCommand extends Command {
 
     public HelpCommand() {
-
+        super("help");
     }
 
     @Override
-    public void execute(@NotNull Console console, @NotNull String command, @Nullable String... args) {
-        console.sendMessage("Currently i don't have any help");
+    public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
+        sender.sendMessage("Currently i don't have any help");
     }
 }
