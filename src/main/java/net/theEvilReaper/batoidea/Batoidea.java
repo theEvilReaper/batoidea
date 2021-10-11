@@ -41,6 +41,8 @@ import net.theEvilReaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -94,7 +96,7 @@ public class Batoidea implements IBot {
         this.fileConfig.load();
         this.identity = new BatoideaIdentity(25);
         this.serviceRegistry = new ServerRegistryImpl();
-        this.userService = new UserService(null);
+        this.userService = new UserService();
         this.channelProvider = new ChannelProvider();
         this.propertyEventCall = new PropertyEventDispatcher(this);
         connect();
@@ -118,16 +120,13 @@ public class Batoidea implements IBot {
             setState(BotState.CONNECTING);
 
             try {
-                //teamspeakClient.connect("116.202.179.207", 5000L);
-                var lookup = TS3DNS.lookup("trainingsoase.net");
-
-                teamspeakClient.connect(lookup.get(0).getHostName(), 5000L);
-
+                var address = new InetSocketAddress(InetAddress.getByName(this.fileConfig.getServer()), 9987);
+                teamspeakClient.connect(address, "", this.fileConfig.getConnectionTimeout());
                 logger.info("Waiting for the connected state");
                 teamspeakClient.waitForState(ClientConnectionState.CONNECTED, 5000L);
             } catch (IOException | TimeoutException | InterruptedException e) {
                 logger.info("Can't connect to the given host. Check IP");
-                System.exit(-1);
+                System.exit(0);
             }
 
             logger.info("Successfully connected to the server");
@@ -182,9 +181,9 @@ public class Batoidea implements IBot {
     }
 
     private void registerCommands() {
-        userCommandProvider.registerCommand(new PongCommand(interactionFactory));
-        userCommandProvider.registerCommand(new SupportCommand(this, getSupportService()));
-        userCommandProvider.registerCommand(new VerifyCommand(interactionFactory, userService));
+        userCommandProvider.registerCommand("pong", new PongCommand(interactionFactory));
+        userCommandProvider.registerCommand("support", new SupportCommand(this, getSupportService()));
+        userCommandProvider.registerCommand("support", new VerifyCommand(interactionFactory));
     }
 
     protected void onLoad() {
