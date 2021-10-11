@@ -5,6 +5,7 @@ import net.theEvilReaper.batoidea.command.console.ExitCommand;
 import net.theEvilReaper.batoidea.command.console.HelpCommand;
 import net.theEvilReaper.batoidea.command.console.NotifyCommand;
 import net.theEvilReaper.batoidea.command.console.UserCommand;
+import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.ConsoleCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,9 +23,12 @@ import java.util.logging.Logger;
  * @since
  **/
 
+@Deprecated(forRemoval = true)
 public class BotConsoleService {
 
-    private final Map<String, ConsoleCommand> commandMap;
+    private static final String[] EMPTY_ARRAY = new String[0];
+
+    private final Map<String, Command> commandMap;
     private final Logger logger;
     private final BotConsole console;
 
@@ -50,10 +54,10 @@ public class BotConsoleService {
 
     private void initCommands(Batoidea batoidea) {
         this.logger.log(Level.INFO, "Registering commands");
-        this.registerCommand("exit", new ExitCommand(batoidea));
-        this.registerCommand("help", new HelpCommand());
-        this.registerCommand("notify", new NotifyCommand(batoidea.getSupportService()));
-        this.registerCommand("user", new UserCommand(batoidea.getUserService(), batoidea.getClientProvider()));
+        this.registerCommand(new ExitCommand(batoidea));
+        this.registerCommand(new HelpCommand());
+        this.registerCommand(new NotifyCommand(batoidea.getSupportService()));
+        this.registerCommand(new UserCommand(batoidea.getUserService(), batoidea.getClientProvider()));
     }
 
     private Thread init() {
@@ -77,25 +81,18 @@ public class BotConsoleService {
         String cmd = split[0];
         String[] args;
 
-        if (split.length == 1) {
-            args = new String[0];
-        } else {
-            args = new String[split.length - 1];
-
-            System.arraycopy(split, 1, args, 0, split.length - 1);
-        }
-
+        args = split.length == 1 ? EMPTY_ARRAY : new String[split.length - 1];
+        System.arraycopy(split, 1, args, 0, split.length - 1);
         dispatch(cmd, args);
     }
 
     /**
      * Register a new {@link ConsoleCommand} to the known commands.
-     * @param name The name fo the command
      * @param command The class from the command that inherit from the {@link ConsoleCommand}
      */
 
-    public void registerCommand(@NotNull String name, @NotNull ConsoleCommand command) {
-        commandMap.put(name.toLowerCase(), command);
+    public void registerCommand(@NotNull Command command) {
+        commandMap.put(command.getName().toLowerCase(), command);
     }
 
     /**
@@ -122,7 +119,7 @@ public class BotConsoleService {
         }
 
         try {
-            command.execute(console, cmd, args);
+           // command.execute(console, cmd, args);
         } catch (Exception exception) {
             logger.log(Level.SEVERE,"Error while executing command: " + cmd, exception);
         }
