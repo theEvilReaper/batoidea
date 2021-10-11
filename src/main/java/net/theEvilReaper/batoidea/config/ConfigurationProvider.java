@@ -11,6 +11,7 @@ import java.nio.file.Paths;
  * @since 1.0.0
  **/
 
+//TODO: Finish the provider
 public class ConfigurationProvider {
 
     private static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -19,8 +20,5 @@ public class ConfigurationProvider {
     public ConfigurationProvider() {
         Path rootPath = Paths.get(ENVIRONMENT);
 
-    }
-
-    public void loadFiles() {
     }
 }
