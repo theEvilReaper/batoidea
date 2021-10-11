@@ -25,10 +25,12 @@ public class BotLogger extends Logger {
 
         setLevel(Level.ALL);
 
+        // setUseParentHandlers(true);
+
         Path logsFolder = Paths.get("logs");
         try {
             Files.createDirectories(logsFolder);
-            FileHandler fh = new FileHandler("logs/latest.%g.log", 80000, 100, false);
+            FileHandler fh = new FileHandler("logs/latest.%g.log", 0, 100, false);
             var formatter = new SimpleFormatter();
             fh.setEncoding(StandardCharsets.UTF_8.name());
             fh.setLevel(Level.ALL);
@@ -36,14 +38,13 @@ public class BotLogger extends Logger {
             addHandler(fh);
             ConsoleHandler consoleHandler = new ConsoleHandler();
             consoleHandler.setEncoding(StandardCharsets.UTF_8.name());
-            consoleHandler.setLevel(Level.INFO);
+            consoleHandler.setLevel(Level.ALL);
             consoleHandler.setFormatter(formatter);
             addHandler(consoleHandler);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void log(LogRecord record) {
