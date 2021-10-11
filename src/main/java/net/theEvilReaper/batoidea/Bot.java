@@ -3,6 +3,7 @@ package net.theEvilReaper.batoidea;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import net.theEvilReaper.batoidea.config.FileConfig;
 import net.theEvilReaper.batoidea.interaction.InteractionFactory;
+import net.theEvilReaper.batoidea.property.PropertyEventDispatcher;
 import net.theEvilReaper.batoidea.service.ChannelProvider;
 import net.theEvilReaper.batoidea.service.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
@@ -12,14 +13,15 @@ import net.theEvilReaper.bot.api.IBot;
 import net.theEvilReaper.bot.api.database.IRedisEventManager;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import net.theEvilReaper.bot.api.interaction.BotInteraction;
+import net.theEvilReaper.bot.api.interaction.InteractionType;
+import net.theEvilReaper.bot.api.interaction.UserInteraction;
+import net.theEvilReaper.bot.api.property.PropertyEventCall;
 import net.theEvilReaper.bot.api.provider.IChannelProvider;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
 import net.theEvilReaper.bot.api.service.ServiceRegistry;
 import net.theEvilReaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -35,6 +37,7 @@ public class Bot implements IBot {
     private final IClientProvider clientProvider;
     private final IUserService userService;
     private final AbstractInteractionFactory interactionFactory;
+    private final PropertyEventCall propertyEventCall;
 
     private BotInteraction botInteraction;
 
@@ -50,10 +53,11 @@ public class Bot implements IBot {
         this.serviceRegistry = new ServerRegistryImpl();
         this.channelProvider = new ChannelProvider();
         this.clientProvider = new ClientProvider(logger, null);
-        this.userService = new UserService();
 
         //TODO: Fix npe
         this.interactionFactory = new InteractionFactory(socket);
+        this.userService = new UserService(interactionFactory.getInteraction(InteractionType.CLIENT, UserInteraction.class));
+        this.propertyEventCall = new PropertyEventDispatcher(this);
     }
 
     @Override
@@ -63,24 +67,7 @@ public class Bot implements IBot {
 
 
 
-
-
-
-
-
-
-
         setState(BotState.RUNNING);
-    }
-
-    @Override
-    public void addChangeListener(@NotNull PropertyChangeListener listener) {
-
-    }
-
-    @Override
-    public void removeChangeListener(@NotNull PropertyChangeListener listener) {
-
     }
 
     @Override
@@ -89,7 +76,7 @@ public class Bot implements IBot {
             try {
                 socket.disconnect();
             } catch (IOException | TimeoutException | ExecutionException | InterruptedException e) {
-                e.printStackTrace();
+                logger.info("An error occurred when disconnecting from the server");
             }
         }
     }
@@ -159,8 +146,8 @@ public class Bot implements IBot {
     }
 
     @Override
-    public PropertyChangeSupport getStateChange() {
-        return null;
+    public PropertyEventCall getPropertyEventCall() {
+        return propertyEventCall;
     }
 
     @Override

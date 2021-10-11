@@ -37,7 +37,7 @@ public class InteractionFactory extends AbstractInteractionFactory {
      * Note that a wrong clazzType throws an {@link IllegalArgumentException}
      * @param type The type which implementation should be determined
      * @param clazzType The implementation class from the {@link Interaction}
-     * @param <T> The value must extends from the {@link Interaction}. Other types are not allowed
+     * @param <T> The value must extend from the {@link Interaction}. Other types are not allowed
      * @return The determined {@link Interaction} implementation.
      */
 
@@ -49,9 +49,23 @@ public class InteractionFactory extends AbstractInteractionFactory {
             throw new IllegalArgumentException("Can't find a implementation for the given " + type.name());
         }
 
-        if (interaction.getClass() != clazzType) {
+        var interfaces = interaction.getClass().getInterfaces();
+        if (interfaces.length == 0 ) {
             throw new IllegalArgumentException("The fetched class and the given clazz are not similar");
         }
+
+        Class<?> clazz = null;
+        for (int i = 0; i < interfaces.length && clazz == null; i++) {
+            var currentInterface = interfaces[i];
+            if (currentInterface == clazzType) {
+                clazz = currentInterface;
+            }
+        }
+
+        if (clazz == null) {
+            throw new IllegalArgumentException("The fetched class and the given clazz are not similar");
+        }
+
         return clazzType.cast(interaction);
     }
 }
