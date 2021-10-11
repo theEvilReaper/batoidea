@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.command.user;
 
-import com.github.manevolent.ts3j.api.Client;
 import net.theEvilReaper.bot.api.command.Command;
+import net.theEvilReaper.bot.api.command.CommandSender;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,11 +15,12 @@ import org.jetbrains.annotations.Nullable;
 public class PongCommand extends Command {
 
     public PongCommand(AbstractInteractionFactory factory) {
-        super(factory);
+        super(factory, "pong");
     }
 
+
     @Override
-    public void onCommand(@NotNull Client executor, @NotNull String command, @Nullable String... args) {
-        userInteraction.sendPrivateMessage(executor, "Pong");
+    public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
+        sender.sendMessage("P.. Po.. Pon... Pong!!");
     }
 }
