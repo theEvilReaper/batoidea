@@ -17,6 +17,7 @@ import java.util.logging.Logger;
  * @since 1.0.0
  **/
 
+@Deprecated(forRemoval = true)
 public class UserCommandProvider {
 
     private final Logger logger;
@@ -31,12 +32,11 @@ public class UserCommandProvider {
 
     /**
      * Register a new {@link ConsoleCommand} to the known commands.
-     * @param name The name fo the command
      * @param command The class from the command that inherit from the {@link ConsoleCommand}
      */
 
-    public void registerCommand(@NotNull String name, @NotNull Command command) {
-        userCommands.put(name.toLowerCase(), command);
+    public void registerCommand(@NotNull Command command) {
+        userCommands.put(command.getName(), command);
     }
 
     /**
@@ -46,6 +46,10 @@ public class UserCommandProvider {
 
     public void unregisterCommand(@NotNull String name) {
         userCommands.remove(name);
+    }
+
+    public void unregisterCommand(@NotNull Command command) {
+        this.userCommands.remove(command.getName());
     }
 
     /**
@@ -63,7 +67,7 @@ public class UserCommandProvider {
         }
 
         try {
-            command.onCommand(client, cmd, args);
+            //command.onCommand(client, cmd, args);
         } catch (Exception exception) {
             logger.info("Error while executing command: " + cmd);
             logger.warning(exception.getMessage());
