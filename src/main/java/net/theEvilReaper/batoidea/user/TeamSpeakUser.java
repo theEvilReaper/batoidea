@@ -1,6 +1,7 @@
 package net.theEvilReaper.batoidea.user;
 
 import com.github.manevolent.ts3j.api.Client;
+import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.user.User;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,14 +16,12 @@ import java.util.Locale;
 
 public class TeamSpeakUser implements User {
 
-    private transient final Client client;
-    private transient Locale locale;
-
-    //TODO: Main Group
-
+    private transient final UserInteraction userInteraction;
     private transient int[] groups;
     private transient int channelID;
 
+    private transient Client client;
+    private transient Locale locale;
     private boolean verified;
 
     /**
@@ -30,8 +29,9 @@ public class TeamSpeakUser implements User {
      * @param client The client to create the user
      */
 
-    public TeamSpeakUser(@NotNull Client client) {
+    public TeamSpeakUser(@NotNull Client client, @NotNull UserInteraction userInteraction) {
         this.client = client;
+        this.userInteraction = userInteraction;
         this.locale = Locale.ENGLISH;
         this.channelID = client.getChannelId();
         this.groups = client.getServerGroups();
@@ -43,8 +43,17 @@ public class TeamSpeakUser implements User {
      * @return the created instance of the {@link TeamSpeakUser}
      */
 
-    public static TeamSpeakUser of(@NotNull Client client) {
-        return new TeamSpeakUser(client);
+    public static TeamSpeakUser of(@NotNull Client client, @NotNull UserInteraction userInteraction) {
+        return new TeamSpeakUser(client, userInteraction);
+    }
+
+    public void updateClientObject(Client client) {
+        this.client = client;
+    }
+
+    @Override
+    public void sendMessage(@NotNull String message) {
+        this.userInteraction.sendPrivateMessage(client, message);
     }
 
     /**
@@ -146,5 +155,10 @@ public class TeamSpeakUser implements User {
     @Override
     public Client getClient() {
         return client;
+    }
+
+    @Override
+    public String getName() {
+        return client.getNickname();
     }
 }
