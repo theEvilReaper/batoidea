@@ -19,14 +19,14 @@ import java.util.logging.Logger;
  * @since 1.0.0
  **/
 
-public class FileConfig extends Config implements BotConfig {
+public class BotConfigImpl extends Config implements BotConfig {
 
     private static final String FILE_NAME = "config.properties";
 
     private final Logger logger;
     private final Path configPath;
 
-    public FileConfig(String directory) {
+    public BotConfigImpl(String directory) {
         this.logger = Logger.getLogger("BotLogger");
         this.configPath = Paths.get(directory, FILE_NAME);
     }
