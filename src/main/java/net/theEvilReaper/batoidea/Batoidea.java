@@ -3,7 +3,6 @@ package net.theEvilReaper.batoidea;
 import com.github.manevolent.ts3j.api.Channel;
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.command.CommandException;
-import com.github.manevolent.ts3j.protocol.TS3DNS;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import io.javalin.Javalin;
@@ -11,7 +10,7 @@ import net.theEvilReaper.batoidea.command.UserCommandProvider;
 import net.theEvilReaper.batoidea.command.user.PongCommand;
 import net.theEvilReaper.batoidea.command.user.SupportCommand;
 import net.theEvilReaper.batoidea.command.user.VerifyCommand;
-import net.theEvilReaper.batoidea.config.FileConfig;
+import net.theEvilReaper.batoidea.config.BotConfigImpl;
 import net.theEvilReaper.batoidea.console.BotConsoleService;
 import net.theEvilReaper.batoidea.identity.BatoideaIdentity;
 import net.theEvilReaper.batoidea.interaction.BatoideaInteraction;
@@ -75,7 +74,7 @@ public class Batoidea implements IBot {
     private final IChannelProvider channelProvider;
     private final IUserService userService;
     private final Identity identity;
-    private final FileConfig fileConfig;
+    private final BotConfigImpl fileConfig;
     private final PropertyEventCall propertyEventCall;
 
     private UserCommandProvider userCommandProvider;
@@ -92,7 +91,7 @@ public class Batoidea implements IBot {
 
     public Batoidea(Logger logger) {
         this.logger = logger;
-        this.fileConfig = new FileConfig(System.getProperty("user.dir"));
+        this.fileConfig = new BotConfigImpl(System.getProperty("user.dir"));
         this.fileConfig.load();
         this.identity = new BatoideaIdentity(25);
         this.serviceRegistry = new ServerRegistryImpl();
