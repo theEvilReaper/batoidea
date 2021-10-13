@@ -1,7 +1,6 @@
 package net.theEvilReaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.api.Client;
-import com.github.manevolent.ts3j.api.Permission;
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
@@ -62,24 +61,6 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
         Conditions.checkForEmpty(message);
         try {
             teamspeakClient.clientPoke(clientID, message);
-        } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    @Override
-    public void addPermission(int clientDatabaseID, @Nullable Permission... permissions) {
-        try {
-            teamspeakClient.clientAddPermission(clientDatabaseID, permissions);
-        } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    @Override
-    public void removePermission(int clientDatabaseID, @Nullable Permission... permissions) {
-        try {
-            teamspeakClient.clientDeletePermission(clientDatabaseID, permissions);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
         }
