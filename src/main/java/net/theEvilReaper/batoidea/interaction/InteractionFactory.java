@@ -30,6 +30,7 @@ public class InteractionFactory extends AbstractInteractionFactory {
         this.interactions[1] = new ServerGroupInteraction(socket);
         this.interactions[2] = new ServerInteraction(socket);
         this.interactions[3] = new ServerChannelInteraction(socket);
+        this.interactions[4] = new ClientPermissionInteraction(socket);
     }
 
     /**
