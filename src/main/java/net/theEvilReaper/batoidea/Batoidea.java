@@ -17,8 +17,8 @@ import net.theEvilReaper.batoidea.interaction.BatoideaInteraction;
 import net.theEvilReaper.batoidea.interaction.InteractionFactory;
 import net.theEvilReaper.batoidea.listener.TeamSpeakListener;
 import net.theEvilReaper.batoidea.property.PropertyEventDispatcher;
-import net.theEvilReaper.batoidea.service.ChannelProvider;
-import net.theEvilReaper.batoidea.service.ClientProvider;
+import net.theEvilReaper.batoidea.provider.ChannelProvider;
+import net.theEvilReaper.batoidea.provider.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.service.SupportService;
 import net.theEvilReaper.batoidea.service.listener.ClientListener;
@@ -42,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -91,7 +92,7 @@ public class Batoidea implements IBot {
 
     public Batoidea(Logger logger) {
         this.logger = logger;
-        this.fileConfig = new BotConfigImpl(System.getProperty("user.dir"));
+        this.fileConfig = new BotConfigImpl(Paths.get(System.getProperty("user.dir")));
         this.fileConfig.load();
         this.identity = new BatoideaIdentity(25);
         this.serviceRegistry = new ServerRegistryImpl();
