@@ -48,7 +48,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  * @author theEvilReaper
@@ -60,8 +59,6 @@ public class Batoidea implements IBot {
 
     private static final int BOT_GROUP = 1149;
     private static final int BOT_MUSIC_GROUP = 1144;
-
-    public static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
 
     private int botID;
 

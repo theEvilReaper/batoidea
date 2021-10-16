@@ -6,6 +6,7 @@ import net.theEvilReaper.batoidea.command.console.HelpCommand;
 import net.theEvilReaper.batoidea.command.console.NotifyCommand;
 import net.theEvilReaper.batoidea.command.console.UserCommand;
 import net.theEvilReaper.bot.api.command.ConsoleCommand;
+import net.theEvilReaper.bot.api.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +69,7 @@ public class BotConsoleService {
     }
 
     private void handleInput(@NotNull String line) {
-        var split = Batoidea.SPLIT_PATTERN.split(line);
+        var split = Strings.SPACE_PATTERN.split(line);
 
         if (split.length == 0) {
             return;
