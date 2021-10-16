@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import static net.theEvilReaper.batoidea.config.ConfigurationProvider.UTF_8_CHARSET;
+
 /**
  * @author theEvilReaper
  * @version 1.0.0
@@ -26,9 +28,10 @@ public class BotConfigImpl extends Config implements BotConfig {
     private final Logger logger;
     private final Path configPath;
 
-    public BotConfigImpl(String directory) {
+    public BotConfigImpl(Path directory) {
         this.logger = Logger.getLogger("BotLogger");
-        this.configPath = Paths.get(directory, FILE_NAME);
+        this.configPath = Paths.get(directory.toString(), FILE_NAME);
+        this.load();
     }
 
     /**
@@ -46,7 +49,7 @@ public class BotConfigImpl extends Config implements BotConfig {
           this.logger.info("Loading config file");
           this.properties = new Properties();
           try (InputStream inputStream = Files.newInputStream(this.configPath)) {
-                this.properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                this.properties.load(new InputStreamReader(inputStream, UTF_8_CHARSET));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -71,7 +74,7 @@ public class BotConfigImpl extends Config implements BotConfig {
      * Generates a default config
      */
 
-    private void generateDefaultConfig() {
+    protected void generateDefaultConfig() {
         this.properties = new Properties();
 
         this.properties.setProperty("name", "TeamSpeakBot");
