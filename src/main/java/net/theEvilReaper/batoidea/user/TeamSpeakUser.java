@@ -15,14 +15,13 @@ import java.util.Locale;
 
 public class TeamSpeakUser implements User {
 
-    private transient final Client client;
+    private transient Client client;
     private transient Locale locale;
-
-    //TODO: Main Group
 
     private transient int[] groups;
     private transient int channelID;
 
+    private int mainGroup;
     private boolean verified;
 
     /**
@@ -58,6 +57,18 @@ public class TeamSpeakUser implements User {
     }
 
     /**
+     * Refresh some underlying data.
+     * @param client The object to update
+     */
+
+    @Override
+    public void refresh(@NotNull Client client) {
+        this.client = client;
+        this.channelID = client.getChannelId();
+        this.groups = client.getServerGroups();;
+    }
+
+    /**
      * Set the current channel from the client.
      * @param channelID The new channel id
      */
@@ -68,7 +79,7 @@ public class TeamSpeakUser implements User {
     }
 
     /**
-     * Change the verified status. Standard value is false
+     * Change the verified status. Standard value is false.
      * @param verified If the player is verified as boolean
      */
 
@@ -88,14 +99,23 @@ public class TeamSpeakUser implements User {
     }
 
     /**
+     * Set the main group for the user.
+     * @param mainGroup The id to set
+     */
+
+    @Override
+    public void setMainGroup(int mainGroup) {
+        this.mainGroup = mainGroup;
+    }
+
+    /**
      * Returns the main teamspeak group of the user.
      * @return the current main group as id
      */
 
     @Override
     public int getMainGroup() {
-        //TODO: FIX ME -> Return the right group
-        return 0;
+        return mainGroup;
     }
 
     /**
@@ -135,7 +155,7 @@ public class TeamSpeakUser implements User {
 
     @Override
     public Locale getLocale() {
-        return null;
+        return locale;
     }
 
     /**
