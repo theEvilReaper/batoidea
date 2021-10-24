@@ -116,7 +116,6 @@ public class Batoidea implements IBot {
             setState(BotState.CONNECTING);
 
             try {
-                //teamspeakClient.connect("116.202.179.207", 5000L);
                 var lookup = TS3DNS.lookup("trainingsoase.net");
 
                 teamspeakClient.connect(lookup.get(0).getHostName(), 5000L);
@@ -179,7 +178,7 @@ public class Batoidea implements IBot {
     }
 
     private void registerCommands() {
-        commandManager.register(new PongCommand(interactionFactory));
+        commandManager.register(new PongCommand());
         commandManager.register(new ExitCommand(this));
         commandManager.register(new HelpCommand());
     }
