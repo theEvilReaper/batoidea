@@ -42,11 +42,13 @@ public class TeamSpeakListener implements TS3Listener, CommandParser {
         if (event.getInvokerId() == botID) return; //Ignore our own sent messages
         if (!Conditions.isPrivatChannel(event.getTargetMode())) return;
 
+        var message = event.getMessage().trim();
+
+        if (message.isEmpty()) return;
+
         var client = clientProvider.getClientById(event.getInvokerId());
 
         if (client == null) return;
-
-        var message = event.getMessage();
 
         logger.info("Received message " + message + " from: " + client.getNickname());
 
