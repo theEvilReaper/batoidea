@@ -13,7 +13,6 @@ import net.theEvilReaper.bot.api.util.Conditions;
 
 import java.util.logging.Logger;
 
-
 /**
  * @author theEvilReaper
  * @version 1.0.0
