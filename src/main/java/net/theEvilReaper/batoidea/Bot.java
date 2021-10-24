@@ -54,7 +54,7 @@ public class Bot implements IBot {
 
         //TODO: Fix npe
         this.interactionFactory = new InteractionFactory(socket);
-        this.userService = new UserService();
+        this.userService = new UserService(null);
         this.propertyEventCall = new PropertyEventDispatcher(this);
     }
 
