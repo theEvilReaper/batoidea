@@ -7,10 +7,10 @@ import com.github.manevolent.ts3j.protocol.TS3DNS;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import io.javalin.Javalin;
-import net.theEvilReaper.batoidea.command.UserCommandProvider;
-import net.theEvilReaper.batoidea.command.user.PongCommand;
-import net.theEvilReaper.batoidea.command.user.SupportCommand;
-import net.theEvilReaper.batoidea.command.user.VerifyCommand;
+import net.theEvilReaper.batoidea.command.CommandManagerImpl;
+import net.theEvilReaper.batoidea.command.commands.ExitCommand;
+import net.theEvilReaper.batoidea.command.commands.HelpCommand;
+import net.theEvilReaper.batoidea.command.commands.PongCommand;
 import net.theEvilReaper.batoidea.config.FileConfig;
 import net.theEvilReaper.batoidea.console.BotConsoleService;
 import net.theEvilReaper.batoidea.identity.BatoideaIdentity;
@@ -46,7 +46,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  * @author theEvilReaper
@@ -58,8 +57,6 @@ public class Batoidea implements IBot {
 
     private static final int BOT_GROUP = 1149;
     private static final int BOT_MUSIC_GROUP = 1144;
-
-    public static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
 
     private int botID;
 
@@ -75,8 +72,8 @@ public class Batoidea implements IBot {
     private final Identity identity;
     private final FileConfig fileConfig;
     private final PropertyEventCall propertyEventCall;
+    private final CommandManagerImpl commandManager;
 
-    private UserCommandProvider userCommandProvider;
     private AbstractInteractionFactory interactionFactory;
 
     private BotState state = BotState.STOPPED;
@@ -97,6 +94,7 @@ public class Batoidea implements IBot {
         this.userService = new UserService(null);
         this.channelProvider = new ChannelProvider();
         this.propertyEventCall = new PropertyEventDispatcher(this);
+        this.commandManager = new CommandManagerImpl();
         connect();
     }
 
@@ -163,14 +161,13 @@ public class Batoidea implements IBot {
 
             var interaction = interactionFactory.getInteraction(InteractionType.CLIENT, UserInteraction.class);
 
-            this.userCommandProvider = new UserCommandProvider(logger, interaction);
             this.botInteraction = new BatoideaInteraction(teamspeakClient, botID);
             onLoad();
-            teamspeakClient.addListener(new TeamSpeakListener(this, userCommandProvider));
+            teamspeakClient.addListener(new TeamSpeakListener(this, commandManager, userService));
             teamspeakClient.addListener(new ClientListener(clientProvider, userService, logger, botID));
             teamspeakClient.addListener(new SupportListener(botID, supportService, (UserService) userService));
             this.supportService = new SupportService(interaction, 7564, 7552);
-            new BotConsoleService(logger, this);
+            new BotConsoleService(this, commandManager);
             registerCommands();
         }
 
@@ -182,9 +179,9 @@ public class Batoidea implements IBot {
     }
 
     private void registerCommands() {
-        userCommandProvider.registerCommand(new PongCommand(interactionFactory));
-        userCommandProvider.registerCommand(new SupportCommand(this, getSupportService()));
-        userCommandProvider.registerCommand(new VerifyCommand(interactionFactory, userService));
+        commandManager.register(new PongCommand(interactionFactory));
+        commandManager.register(new ExitCommand(this));
+        commandManager.register(new HelpCommand());
     }
 
     protected void onLoad() {
