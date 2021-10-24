@@ -28,6 +28,7 @@ public class CommandManagerImpl implements CommandManager {
     private CommandCallback unknownCommandCallback;
 
     public CommandManagerImpl() {
+        setUnknownCommandCallback((commandSender, command) -> commandSender.sendMessage("Unknown Command: " + command));
     }
 
     @Override
@@ -69,10 +70,6 @@ public class CommandManagerImpl implements CommandManager {
     @Override
     @NotNull
     public CommandResult executeCommand(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
-        if (sender instanceof User user) {
-            //TODO: Update client
-        }
-
         var result = this.dispatcher.executeCommand(sender, command, args);
 
         if (result.type() == CommandResult.ResultType.UNKNOWN) {
@@ -99,12 +96,6 @@ public class CommandManagerImpl implements CommandManager {
 
     @Override
     @NotNull
-    public ConsoleSender getConsoleSender() {
-        return consoleSender;
-    }
-
-    @NotNull
-    @Override
     public String getCommandPrefix() {
         return COMMAND_PREFIX;
     }
