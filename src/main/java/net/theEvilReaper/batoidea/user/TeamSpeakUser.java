@@ -23,9 +23,6 @@ public class TeamSpeakUser implements User {
     private transient Client client;
     private transient Locale locale;
 
-    private transient int[] groups;
-    private transient int channelID;
-
     private int mainGroup;
     private boolean verified;
 
