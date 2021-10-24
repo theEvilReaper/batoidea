@@ -1,8 +1,8 @@
-package net.theEvilReaper.batoidea.command.user;
+package net.theEvilReaper.batoidea.command.commands;
 
+import net.theEvilReaper.batoidea.Batoidea;
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.CommandSender;
-import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,15 +12,18 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.0.0
  **/
 
-public class PongCommand extends Command {
+public class ExitCommand extends Command {
 
-    public PongCommand(AbstractInteractionFactory factory) {
-        super(factory, "pong");
+    private final Batoidea batoidea;
+
+    public ExitCommand(Batoidea batoidea) {
+        super("exit");
+        this.batoidea = batoidea;
     }
-
 
     @Override
     public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
-        sender.sendMessage("P.. Po.. Pon... Pong!!");
+        sender.sendMessage("Shutting down");
+        batoidea.disconnect();
     }
 }

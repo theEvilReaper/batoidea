@@ -1,6 +1,5 @@
-package net.theEvilReaper.batoidea.command.console;
+package net.theEvilReaper.batoidea.command.commands;
 
-import net.theEvilReaper.batoidea.Batoidea;
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -9,21 +8,17 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author theEvilReaper
  * @version 1.0.0
- * @since 1.0.0
+ * @since
  **/
 
-public class ExitCommand extends Command {
+public class HelpCommand extends Command {
 
-    private final Batoidea batoidea;
-
-    public ExitCommand(Batoidea batoidea) {
-        super("exit");
-        this.batoidea = batoidea;
+    public HelpCommand() {
+        super("help");
     }
 
     @Override
     public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
-        sender.sendMessage("Shutting down");
-        batoidea.disconnect();
+        sender.sendMessage("Currently i don't have any help");
     }
 }

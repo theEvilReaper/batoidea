@@ -1,24 +1,25 @@
-package net.theEvilReaper.batoidea.command.console;
+package net.theEvilReaper.batoidea.command.commands;
 
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.CommandSender;
+import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author theEvilReaper
  * @version 1.0.0
- * @since
+ * @since 1.0.0
  **/
 
-public class HelpCommand extends Command {
+public class PongCommand extends Command {
 
-    public HelpCommand() {
-        super("help");
+    public PongCommand(AbstractInteractionFactory factory) {
+        super(factory, "pong");
     }
 
     @Override
     public void apply(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
-        sender.sendMessage("Currently i don't have any help");
+        sender.sendMessage("P.. Po.. Pon... Pong!!");
     }
 }
