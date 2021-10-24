@@ -3,6 +3,7 @@ package net.theEvilReaper.batoidea;
 import com.github.manevolent.ts3j.api.Channel;
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.command.CommandException;
+import com.github.manevolent.ts3j.protocol.TS3DNS;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import io.javalin.Javalin;
@@ -10,13 +11,8 @@ import net.theEvilReaper.batoidea.command.CommandManagerImpl;
 import net.theEvilReaper.batoidea.command.commands.ExitCommand;
 import net.theEvilReaper.batoidea.command.commands.HelpCommand;
 import net.theEvilReaper.batoidea.command.commands.PongCommand;
-import net.theEvilReaper.batoidea.config.FileConfig;
-import net.theEvilReaper.batoidea.command.UserCommandProvider;
-import net.theEvilReaper.batoidea.command.user.PongCommand;
-import net.theEvilReaper.batoidea.command.user.SupportCommand;
-import net.theEvilReaper.batoidea.command.user.VerifyCommand;
 import net.theEvilReaper.batoidea.config.BotConfigImpl;
-import net.theEvilReaper.batoidea.console.BotConsoleService;
+import net.theEvilReaper.batoidea.terminal.Terminal;
 import net.theEvilReaper.batoidea.identity.BatoideaIdentity;
 import net.theEvilReaper.batoidea.interaction.BatoideaInteraction;
 import net.theEvilReaper.batoidea.interaction.InteractionFactory;
@@ -25,9 +21,7 @@ import net.theEvilReaper.batoidea.property.PropertyEventDispatcher;
 import net.theEvilReaper.batoidea.provider.ChannelProvider;
 import net.theEvilReaper.batoidea.provider.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
-import net.theEvilReaper.batoidea.service.SupportService;
-import net.theEvilReaper.batoidea.service.listener.ClientListener;
-import net.theEvilReaper.batoidea.service.listener.SupportListener;
+import net.theEvilReaper.batoidea.listener.ClientListener;
 import net.theEvilReaper.batoidea.user.UserService;
 import net.theEvilReaper.bot.api.BotState;
 import net.theEvilReaper.bot.api.IBot;
@@ -35,8 +29,6 @@ import net.theEvilReaper.bot.api.database.IRedisEventManager;
 import net.theEvilReaper.bot.api.identity.Identity;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import net.theEvilReaper.bot.api.interaction.BotInteraction;
-import net.theEvilReaper.bot.api.interaction.InteractionType;
-import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.property.PropertyEventCall;
 import net.theEvilReaper.bot.api.provider.IChannelProvider;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
@@ -80,6 +72,8 @@ public class Batoidea implements IBot {
     private final BotConfigImpl fileConfig;
     private final PropertyEventCall propertyEventCall;
     private final CommandManagerImpl commandManager;
+    private final Terminal terminal;
+
 
     private AbstractInteractionFactory interactionFactory;
 
@@ -88,7 +82,6 @@ public class Batoidea implements IBot {
 
     private BotInteraction botInteraction;
     private IClientProvider clientProvider;
-    private SupportService supportService;
 
     private IRedisEventManager iRedisEventManager;
 
@@ -98,10 +91,13 @@ public class Batoidea implements IBot {
         this.fileConfig.load();
         this.identity = new BatoideaIdentity(25);
         this.serviceRegistry = new ServerRegistryImpl();
-        this.userService = new UserService();
+        //TODO: FIX NPE
+        this.userService = new UserService(null);
         this.channelProvider = new ChannelProvider();
         this.propertyEventCall = new PropertyEventDispatcher(this);
         this.commandManager = new CommandManagerImpl();
+        this.terminal = new Terminal(this.commandManager);
+        this.terminal.startTerminal();
         connect();
     }
 
@@ -131,7 +127,7 @@ public class Batoidea implements IBot {
                 teamspeakClient.waitForState(ClientConnectionState.CONNECTED, 5000L);
             } catch (IOException | TimeoutException | InterruptedException e) {
                 logger.info("Can't connect to the given host. Check IP");
-                System.exit(0);
+                //System.exit(0);
             }
 
             logger.info("Successfully connected to the server");
@@ -159,21 +155,20 @@ public class Batoidea implements IBot {
 
 
             botID = teamspeakClient.getClientId();
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> stopping = true));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                stopping = true;
+                terminal.stopTerminal();
+            }));
+
             setState(BotState.RUNNING);
 
             this.clientProvider = new ClientProvider(logger, teamspeakClient);
             this.interactionFactory = new InteractionFactory(teamspeakClient);
 
-            var interaction = interactionFactory.getInteraction(InteractionType.CLIENT, UserInteraction.class);
-
             this.botInteraction = new BatoideaInteraction(teamspeakClient, botID);
             onLoad();
             teamspeakClient.addListener(new TeamSpeakListener(this, commandManager, userService));
             teamspeakClient.addListener(new ClientListener(clientProvider, userService, logger, botID));
-            teamspeakClient.addListener(new SupportListener(botID, supportService, (UserService) userService));
-            this.supportService = new SupportService(interaction, 7564, 7552);
-            new BotConsoleService(this, commandManager);
             registerCommands();
         }
 
@@ -191,10 +186,10 @@ public class Batoidea implements IBot {
     }
 
     protected void onLoad() {
-        if (!getTeamspeakClient().isConnected()) {
+        /*if (!getTeamspeakClient().isConnected()) {
             disconnect();
             return;
-        }
+        }*/
 
         try {
             for (Client client : teamspeakClient.listClients()) {
@@ -314,10 +309,6 @@ public class Batoidea implements IBot {
 
     public Date getStarted() {
         return started;
-    }
-
-    public SupportService getSupportService() {
-        return supportService;
     }
 
     @Override
