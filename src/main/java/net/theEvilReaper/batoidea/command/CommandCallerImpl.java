@@ -2,7 +2,7 @@ package net.theEvilReaper.batoidea.command;
 
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.CommandCaller;
-import net.theEvilReaper.bot.api.command.ConsoleSender;
+import net.theEvilReaper.bot.api.command.CommandSender;
 import net.theEvilReaper.bot.api.command.result.CommandResult;
 import net.theEvilReaper.bot.api.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * @author theEvilReaper
  * @version 1.0.0
- * @since
+ * @since 1.0.0
  **/
 
 public class CommandCallerImpl implements CommandCaller {
@@ -61,13 +61,14 @@ public class CommandCallerImpl implements CommandCaller {
     }
 
     @Override
-    public CommandResult executeCommand(@NotNull ConsoleSender sender, @NotNull String command, @NotNull String... args) {
+    public CommandResult executeCommand(@NotNull CommandSender sender, @NotNull String command, @NotNull String... args) {
         var result = getResult(command);
 
-        if (result.type() != CommandResult.ResultType.UNKNOWN) {
+        if (result.type() != CommandResult.ResultType.UNKNOWN && result.command() != null) {
             var commandInstance = result.command();
             commandInstance.apply(sender, commandInstance.getName(), result.args());
         }
+
         return result;
     }
 
@@ -91,6 +92,7 @@ public class CommandCallerImpl implements CommandCaller {
         }
 
         var args = new String[parts.length - 1];
+
         if (parts.length > 1) {
             System.arraycopy(parts, 1, args, 0, parts.length - 1);
         }

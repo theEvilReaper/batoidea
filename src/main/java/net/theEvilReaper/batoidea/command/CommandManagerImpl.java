@@ -4,6 +4,7 @@ import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.CommandCallback;
 import net.theEvilReaper.bot.api.command.CommandCaller;
 import net.theEvilReaper.bot.api.command.CommandManager;
+import net.theEvilReaper.bot.api.command.CommandSender;
 import net.theEvilReaper.bot.api.command.ConsoleSender;
 import net.theEvilReaper.bot.api.command.result.CommandResult;
 import net.theEvilReaper.bot.api.user.User;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CommandManagerImpl implements CommandManager {
 
-    public static String COMMAND_PREFIX = "/";
+    private static String COMMAND_PREFIX = "/";
     private final ConsoleSender consoleSender = new ConsoleSender();
 
     private final CommandCaller dispatcher = new CommandCallerImpl();
@@ -67,7 +68,7 @@ public class CommandManagerImpl implements CommandManager {
 
     @Override
     @NotNull
-    public CommandResult executeCommand(@NotNull ConsoleSender sender, @NotNull String command, @Nullable String... args) {
+    public CommandResult executeCommand(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
         if (sender instanceof User user) {
             //TODO: Update client
         }
@@ -80,10 +81,7 @@ public class CommandManagerImpl implements CommandManager {
             }
         }
 
-
         return result;
-
-
     }
 
     @Nullable
@@ -103,5 +101,11 @@ public class CommandManagerImpl implements CommandManager {
     @NotNull
     public ConsoleSender getConsoleSender() {
         return consoleSender;
+    }
+
+    @NotNull
+    @Override
+    public String getCommandPrefix() {
+        return COMMAND_PREFIX;
     }
 }
