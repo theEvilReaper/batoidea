@@ -1,6 +1,8 @@
 package net.theEvilReaper.batoidea.config;
 
 import net.theEvilReaper.bot.api.config.BotConfig;
+import net.theEvilReaper.bot.api.config.IConfig;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -32,10 +34,12 @@ public class ConfigurationProvider {
 
         if (!Files.exists(Paths.get(rootPath.toString(), CONFIG_FOLDER))) {
             System.out.println("Creating folder for the config...");
-            botConfig = new BotConfigImpl(rootPath);
-        } else {
-            botConfig = new BotConfigImpl(rootPath);
         }
+        botConfig = new BotConfigImpl(rootPath);
+    }
+
+    public IConfig loadConfiguration(@NotNull Path path) {
+        return null;
     }
 
     public BotConfig getBotConfig() {
