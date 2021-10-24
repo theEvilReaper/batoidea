@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * @author theEvilReaper
  * @version 1.0.0
- * @since
+ * @since 1.0.0
  **/
 
 public class Terminal implements CommandParser {
@@ -52,12 +52,11 @@ public class Terminal implements CommandParser {
         return new Thread(() -> {
             while (running) {
                 String input = scanner.nextLine();
-                if (input == null || input.isEmpty()) return;
+                if (input == null || input.trim().isEmpty()) return;
                 parse(commandManager, CONSOLE, input);
             }
         });
     }
-
 
     public void stopTerminal() {
         if (!running) return;
