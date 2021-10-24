@@ -3,13 +3,13 @@ package net.theEvilReaper.batoidea.listener;
 import com.github.manevolent.ts3j.event.TS3Listener;
 import com.github.manevolent.ts3j.event.TextMessageEvent;
 import net.theEvilReaper.batoidea.Batoidea;
-import net.theEvilReaper.batoidea.interaction.ClientInteraction;
 import net.theEvilReaper.bot.api.command.CommandManager;
+import net.theEvilReaper.bot.api.command.CommandParser;
 import net.theEvilReaper.bot.api.interaction.InteractionType;
+import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
 import net.theEvilReaper.bot.api.user.IUserService;
 import net.theEvilReaper.bot.api.util.Conditions;
-import net.theEvilReaper.bot.api.util.Strings;
 
 import java.util.logging.Logger;
 
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @since 1.0.0
  **/
 
-public class TeamSpeakListener implements TS3Listener {
+public class TeamSpeakListener implements TS3Listener, CommandParser {
 
     private static final Logger logger = Logger.getLogger("BotLogger");
 
@@ -28,14 +28,14 @@ public class TeamSpeakListener implements TS3Listener {
     private final CommandManager commandManager;
     private final IUserService userService;
     private final IClientProvider clientProvider;
-    private final ClientInteraction clientInteraction;
+    private final UserInteraction clientInteraction;
 
     public TeamSpeakListener(Batoidea batoidea, CommandManager commandManager, IUserService userService) {
         this.botID = batoidea.getBotID();
         this.commandManager = commandManager;
         this.clientProvider = batoidea.getClientProvider();
         this.userService = userService;
-        this.clientInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, ClientInteraction.class);
+        this.clientInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, UserInteraction.class);
     }
 
     @Override
@@ -64,14 +64,6 @@ public class TeamSpeakListener implements TS3Listener {
             return;
         }
 
-        var split = Strings.SPLIT_PATTERN.split(message.replaceFirst(commandManager.getCommandPrefix(), ""));
-
-        String[] args = new String[split.length - 1];
-
-        if (split.length > 1) {
-            System.arraycopy(split, 1, args, 0, split.length - 1);
-        }
-
-        commandManager.executeCommand(user, split[0], args);
+        this.parse(commandManager, user, message.replaceFirst(commandManager.getCommandPrefix(), ""));
     }
 }

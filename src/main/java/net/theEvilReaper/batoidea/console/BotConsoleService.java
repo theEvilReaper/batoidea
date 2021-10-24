@@ -2,6 +2,7 @@ package net.theEvilReaper.batoidea.console;
 
 import net.theEvilReaper.batoidea.Batoidea;
 import net.theEvilReaper.bot.api.command.CommandManager;
+import net.theEvilReaper.bot.api.command.CommandParser;
 import net.theEvilReaper.bot.api.command.CommandSender;
 import net.theEvilReaper.bot.api.command.ConsoleSender;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ import static net.theEvilReaper.bot.api.util.Strings.*;
  **/
 
 @Deprecated(forRemoval = true)
-public class BotConsoleService {
+public class BotConsoleService implements CommandParser {
 
     private static final CommandSender CONSOLE = new ConsoleSender();
 
@@ -46,23 +47,8 @@ public class BotConsoleService {
             while (!exit) {
                 String input = this.scanner.nextLine();
                 if (input == null || input.isEmpty()) return;
-                handleInput(input);
+               this.parse(commandManager, CONSOLE, input);
             }
         });
-    }
-
-    private void handleInput(@NotNull String line) {
-        var split = SPLIT_PATTERN.split(line);
-
-        if (split.length == 0) {
-            return;
-        }
-
-        String command = split[0];
-        String[] arguments;
-
-        arguments = split.length == 1 ? EMPTY_ARRAY : new String[split.length - 1];
-        System.arraycopy(split, 1, arguments, 0, split.length - 1);
-        commandManager.executeCommand(CONSOLE, command, arguments);
     }
 }
