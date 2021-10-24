@@ -13,53 +13,68 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import static net.theEvilReaper.batoidea.config.ConfigurationProvider.UTF_8_CHARSET;
+
 /**
  * @author theEvilReaper
  * @version 1.0.0
  * @since 1.0.0
  **/
 
-public class FileConfig extends Config implements BotConfig {
+public class BotConfigImpl extends Config implements BotConfig {
 
     private static final String FILE_NAME = "config.properties";
 
     private final Logger logger;
     private final Path configPath;
 
-    public FileConfig(String directory) {
+    public BotConfigImpl(Path directory) {
         this.logger = Logger.getLogger("BotLogger");
-        this.configPath = Paths.get(directory, FILE_NAME);
+        this.configPath = Paths.get(directory.toString(), FILE_NAME);
+        this.load();
     }
+
+    /**
+     * Loads the config {@link Properties}.
+     * A {@link Properties} will be created when there is no config available
+     */
 
     @Override
     public void load() {
       if (!Files.exists(configPath)) {
-            logger.info("No config found. Creating config from scratch");
+            this.logger.info("No config found. Creating config from scratch");
             this.generateDefaultConfig();
-            save();
+            this.save();
         } else {
-          logger.info("Loading config file");
+          this.logger.info("Loading config file");
           this.properties = new Properties();
-          try (InputStream inputStream = Files.newInputStream(configPath)) {
-                this.properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+          try (InputStream inputStream = Files.newInputStream(this.configPath)) {
+                this.properties.load(new InputStreamReader(inputStream, UTF_8_CHARSET));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-          logger.info("Config successfully loaded");
-          logger.info("The name of the bot is: " + getName());
+          this.logger.info("Config successfully loaded");
         }
     }
 
+    /**
+     * Writes the data into the config {@link Properties}.
+     */
+
     @Override
     public void save() {
-       try (OutputStream outputStream = Files.newOutputStream(configPath)) {
+       try (OutputStream outputStream = Files.newOutputStream(this.configPath)) {
             this.properties.store(outputStream, "This is the config for the bot");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    private void generateDefaultConfig() {
+    /**
+     * Generates a default config
+     */
+
+    protected void generateDefaultConfig() {
         this.properties = new Properties();
 
         this.properties.setProperty("name", "TeamSpeakBot");

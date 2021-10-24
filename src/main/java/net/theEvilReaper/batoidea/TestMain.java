@@ -1,5 +1,7 @@
 package net.theEvilReaper.batoidea;
 
+import java.util.logging.Logger;
+
 /**
  * @author theEvilReaper
  * @version 1.0.0
@@ -9,6 +11,6 @@ package net.theEvilReaper.batoidea;
 public class TestMain {
 
     public static void main(String[] args) {
-        new Batoidea();
+        new Batoidea(Logger.getLogger("BotLogger"));
     }
 }

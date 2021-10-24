@@ -1,7 +1,6 @@
 package net.theEvilReaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.api.Client;
-import com.github.manevolent.ts3j.api.Permission;
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
@@ -33,12 +32,9 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
 
     @Override
     public void moveToChannel(int channelId, @NotNull Client client, @Nullable String password) {
-        //TODO: FIX ME
-        if (password == null) {
-            throw new IllegalArgumentException("The password can not be null");
+        if (password != null) {
+            Conditions.checkForEmpty(password);
         }
-
-        Conditions.checkForEmpty(password);
 
         try {
             teamspeakClient.clientMove(client.getId(), channelId, password);
@@ -62,24 +58,6 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
         Conditions.checkForEmpty(message);
         try {
             teamspeakClient.clientPoke(clientID, message);
-        } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    @Override
-    public void addPermission(int clientDatabaseID, @Nullable Permission... permissions) {
-        try {
-            teamspeakClient.clientAddPermission(clientDatabaseID, permissions);
-        } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    @Override
-    public void removePermission(int clientDatabaseID, @Nullable Permission... permissions) {
-        try {
-            teamspeakClient.clientDeletePermission(clientDatabaseID, permissions);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
         }

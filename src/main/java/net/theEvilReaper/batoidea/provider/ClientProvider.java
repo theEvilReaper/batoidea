@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.service;
+package net.theEvilReaper.batoidea.provider;
 
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -31,7 +32,7 @@ public class ClientProvider implements IClientProvider {
         this.clientMap = new HashMap<>();
         this.lock = new ReentrantLock();
         this.clientCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(2, TimeUnit.MINUTES)
+                .expireAfterWrite(10, TimeUnit.SECONDS)
                 .build();
         this.clientIdentifierCache = CacheBuilder.newBuilder()
                 .expireAfterAccess(5, TimeUnit.MINUTES)
@@ -40,8 +41,8 @@ public class ClientProvider implements IClientProvider {
 
     @Override
     public void add(@NotNull Client client) {
-        if (this.clientMap.putIfAbsent(client.getId(), client) == client) {
-            System.out.println("Added Client " + client.getNickname() + ",ID=" + client.getDatabaseId());
+        if (Objects.requireNonNull(this.clientMap.putIfAbsent(client.getId(), client)).getDatabaseId() == client.getDatabaseId()) {
+            logger.info("Add client with name= " + client.getNickname() + " and id=" + client.getDatabaseId());
         }
     }
 
@@ -76,7 +77,6 @@ public class ClientProvider implements IClientProvider {
         try {
             lock.lock();
             var teamspeakClient = findClient(client);
-
             if (teamspeakClient == null) {
                 this.clientMap.put(client.getId(), client);
             }

@@ -1,11 +1,11 @@
 package net.theEvilReaper.batoidea;
 
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.batoidea.config.FileConfig;
+import net.theEvilReaper.batoidea.config.BotConfigImpl;
 import net.theEvilReaper.batoidea.interaction.InteractionFactory;
 import net.theEvilReaper.batoidea.property.PropertyEventDispatcher;
-import net.theEvilReaper.batoidea.service.ChannelProvider;
-import net.theEvilReaper.batoidea.service.ClientProvider;
+import net.theEvilReaper.batoidea.provider.ChannelProvider;
+import net.theEvilReaper.batoidea.provider.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.user.UserService;
 import net.theEvilReaper.bot.api.BotState;
@@ -13,8 +13,6 @@ import net.theEvilReaper.bot.api.IBot;
 import net.theEvilReaper.bot.api.database.IRedisEventManager;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import net.theEvilReaper.bot.api.interaction.BotInteraction;
-import net.theEvilReaper.bot.api.interaction.InteractionType;
-import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.property.PropertyEventCall;
 import net.theEvilReaper.bot.api.provider.IChannelProvider;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
@@ -31,7 +29,7 @@ public class Bot implements IBot {
 
     private final Logger logger = Logger.getLogger("BotLogger");
     private LocalTeamspeakClientSocket socket;
-    private final FileConfig botConfig;
+    private final BotConfigImpl botConfig;
     private final ServiceRegistry serviceRegistry;
     private final IChannelProvider channelProvider;
     private final IClientProvider clientProvider;
@@ -48,7 +46,7 @@ public class Bot implements IBot {
 
     protected int botID;
 
-    public Bot(@NotNull FileConfig botConfig) {
+    public Bot(@NotNull BotConfigImpl botConfig) {
         this.botConfig = botConfig;
         this.serviceRegistry = new ServerRegistryImpl();
         this.channelProvider = new ChannelProvider();
@@ -56,7 +54,7 @@ public class Bot implements IBot {
 
         //TODO: Fix npe
         this.interactionFactory = new InteractionFactory(socket);
-        this.userService = new UserService(interactionFactory.getInteraction(InteractionType.CLIENT, UserInteraction.class));
+        this.userService = new UserService();
         this.propertyEventCall = new PropertyEventDispatcher(this);
     }
 
@@ -155,7 +153,7 @@ public class Bot implements IBot {
         return null;
     }
 
-    public FileConfig getBotConfig() {
+    public BotConfigImpl getBotConfig() {
         return botConfig;
     }
 }

@@ -3,7 +3,6 @@ package net.theEvilReaper.batoidea;
 import com.github.manevolent.ts3j.api.Channel;
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.command.CommandException;
-import com.github.manevolent.ts3j.protocol.TS3DNS;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import io.javalin.Javalin;
@@ -12,14 +11,19 @@ import net.theEvilReaper.batoidea.command.commands.ExitCommand;
 import net.theEvilReaper.batoidea.command.commands.HelpCommand;
 import net.theEvilReaper.batoidea.command.commands.PongCommand;
 import net.theEvilReaper.batoidea.config.FileConfig;
+import net.theEvilReaper.batoidea.command.UserCommandProvider;
+import net.theEvilReaper.batoidea.command.user.PongCommand;
+import net.theEvilReaper.batoidea.command.user.SupportCommand;
+import net.theEvilReaper.batoidea.command.user.VerifyCommand;
+import net.theEvilReaper.batoidea.config.BotConfigImpl;
 import net.theEvilReaper.batoidea.console.BotConsoleService;
 import net.theEvilReaper.batoidea.identity.BatoideaIdentity;
 import net.theEvilReaper.batoidea.interaction.BatoideaInteraction;
 import net.theEvilReaper.batoidea.interaction.InteractionFactory;
 import net.theEvilReaper.batoidea.listener.TeamSpeakListener;
 import net.theEvilReaper.batoidea.property.PropertyEventDispatcher;
-import net.theEvilReaper.batoidea.service.ChannelProvider;
-import net.theEvilReaper.batoidea.service.ClientProvider;
+import net.theEvilReaper.batoidea.provider.ChannelProvider;
+import net.theEvilReaper.batoidea.provider.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.service.SupportService;
 import net.theEvilReaper.batoidea.service.listener.ClientListener;
@@ -41,6 +45,9 @@ import net.theEvilReaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -70,7 +77,7 @@ public class Batoidea implements IBot {
     private final IChannelProvider channelProvider;
     private final IUserService userService;
     private final Identity identity;
-    private final FileConfig fileConfig;
+    private final BotConfigImpl fileConfig;
     private final PropertyEventCall propertyEventCall;
     private final CommandManagerImpl commandManager;
 
@@ -87,11 +94,11 @@ public class Batoidea implements IBot {
 
     public Batoidea(Logger logger) {
         this.logger = logger;
-        this.fileConfig = new FileConfig(System.getProperty("user.dir"));
+        this.fileConfig = new BotConfigImpl(Paths.get(System.getProperty("user.dir")));
         this.fileConfig.load();
         this.identity = new BatoideaIdentity(25);
         this.serviceRegistry = new ServerRegistryImpl();
-        this.userService = new UserService(null);
+        this.userService = new UserService();
         this.channelProvider = new ChannelProvider();
         this.propertyEventCall = new PropertyEventDispatcher(this);
         this.commandManager = new CommandManagerImpl();
@@ -117,14 +124,14 @@ public class Batoidea implements IBot {
 
             try {
                 var lookup = TS3DNS.lookup("trainingsoase.net");
-
                 teamspeakClient.connect(lookup.get(0).getHostName(), 5000L);
-
+                var address = new InetSocketAddress(InetAddress.getByName(this.fileConfig.getServer()), 9987);
+                teamspeakClient.connect(address, "", this.fileConfig.getConnectionTimeout());
                 logger.info("Waiting for the connected state");
                 teamspeakClient.waitForState(ClientConnectionState.CONNECTED, 5000L);
             } catch (IOException | TimeoutException | InterruptedException e) {
                 logger.info("Can't connect to the given host. Check IP");
-                System.exit(-1);
+                System.exit(0);
             }
 
             logger.info("Successfully connected to the server");

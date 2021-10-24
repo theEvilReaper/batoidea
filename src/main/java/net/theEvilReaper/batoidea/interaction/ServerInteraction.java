@@ -18,7 +18,7 @@ import java.util.concurrent.TimeoutException;
 public record ServerInteraction(LocalTeamspeakClientSocket clientSocket) implements GlobalInteraction {
 
     @Override
-    public void broadcastMessage(@NotNull String message) {
+    public void broadcast(@NotNull String message) {
         Conditions.checkForEmpty(message);
 
         try {
@@ -26,5 +26,23 @@ public record ServerInteraction(LocalTeamspeakClientSocket clientSocket) impleme
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
         }
+    }
+
+    @Override
+    public void broadcast(@NotNull String... messages) {
+        if (messages.length == 0) return;
+
+        if (messages.length == 1) {
+            this.broadcast(messages[0]);
+        }
+
+        for (int i = 0; i < messages.length; i++) {
+            this.broadcast(messages[i]);
+        }
+    }
+
+    @Override
+    public void broadcast(int groupID, @NotNull String message) {
+        //TODO: Implement
     }
 }

@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 public class BatoideaIdentity implements Identity {
 
-    private static final Path path = Paths.get("src/main/resources/", "identity.txt");
+    private static final Path path = Paths.get("id/", "identity.txt");
 
     private LocalIdentity localIdentity;
 

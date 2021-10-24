@@ -1,10 +1,11 @@
-package net.theEvilReaper.batoidea.service;
+package net.theEvilReaper.batoidea.provider;
 
 import com.github.manevolent.ts3j.api.Channel;
 import net.theEvilReaper.bot.api.provider.IChannelProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -39,7 +40,7 @@ public class ChannelProvider implements IChannelProvider {
     public Channel recognizeChannel(@NotNull Channel channel) {
         try {
             lock.lock();
-            var teamSpeakChannel = findChannelID(channel.getId());
+            var teamSpeakChannel = this.channels.get(channel.getId());
 
             if (teamSpeakChannel == null) {
                 channels.put(channel.getId(), channel);
@@ -61,17 +62,8 @@ public class ChannelProvider implements IChannelProvider {
         }
     }
 
-    private Channel findChannelID(int id) {
-        try {
-            lock.lock();
-            return channels.get(id);
-        } finally {
-            lock.unlock();
-        }
-    }
-
     @Override
     public Map<Integer, Channel> getChannels() {
-        return channels;
+        return Collections.unmodifiableMap(channels);
     }
 }
