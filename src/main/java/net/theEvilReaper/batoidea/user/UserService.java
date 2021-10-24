@@ -7,13 +7,13 @@ import net.theEvilReaper.bot.api.user.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserService implements IUserService {
 
     private final Map<Integer, User> userMap;
-
     private final UserInteraction userInteraction;
 
     public UserService(UserInteraction userInteraction) {
@@ -72,6 +72,6 @@ public class UserService implements IUserService {
 
     @Override
     public Map<Integer, User> getUser() {
-        return userMap;
+        return Collections.unmodifiableMap(this.userMap);
     }
 }
