@@ -2,7 +2,6 @@ package net.theEvilReaper.batoidea.command.commands;
 
 import net.theEvilReaper.bot.api.command.Command;
 import net.theEvilReaper.bot.api.command.CommandSender;
-import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class PongCommand extends Command {
 
-    public PongCommand(AbstractInteractionFactory factory) {
-        super(factory, "pong");
+    public PongCommand() {
+        super( "pong", "ping");
     }
 
     @Override
