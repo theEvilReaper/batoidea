@@ -1,12 +1,12 @@
-package net.theEvilReaper.batoidea.service.listener;
+package net.theEvilReaper.batoidea.listener;
 
 import com.github.manevolent.ts3j.event.ClientJoinEvent;
 import com.github.manevolent.ts3j.event.ClientLeaveEvent;
 import com.github.manevolent.ts3j.event.TS3Listener;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
+import net.theEvilReaper.bot.api.user.IUserService;
 
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  * @author theEvilReaper
@@ -16,14 +16,15 @@ import java.util.regex.Pattern;
 
 public class ClientListener implements TS3Listener {
 
-    private static final Pattern BOT_PATTER = Pattern.compile("(\\[.*\\])(.*)");
     private final Logger logger;
     private final IClientProvider clientProvider;
+    private final IUserService iUserService;
     private final int botID;
 
-    public ClientListener(IClientProvider clientProvider, Logger logger, int botID) {
+    public ClientListener(IClientProvider clientProvider, IUserService userService, Logger logger, int botID) {
         this.logger = logger;
         this.clientProvider = clientProvider;
+        this.iUserService = userService;
         this.botID = botID;
     }
 
@@ -45,8 +46,8 @@ public class ClientListener implements TS3Listener {
     @Override
     public void onClientLeave(ClientLeaveEvent event) {
         if (event.getClientId() == botID) return;
-        logger.info("The user with the id: " + event.getClientId()
-                + " left the server. Reason: " + event.getReasonMessage());
+        logger.info("The user with the id: " + event.getClientId() + " left the server");
         clientProvider.remove(event.getClientId());
+        iUserService.removeUser(event.getClientId());
     }
 }
