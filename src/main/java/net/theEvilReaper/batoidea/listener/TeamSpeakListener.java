@@ -3,14 +3,16 @@ package net.theEvilReaper.batoidea.listener;
 import com.github.manevolent.ts3j.event.TS3Listener;
 import com.github.manevolent.ts3j.event.TextMessageEvent;
 import net.theEvilReaper.batoidea.Batoidea;
-import net.theEvilReaper.batoidea.command.UserCommandProvider;
+import net.theEvilReaper.bot.api.command.CommandManager;
+import net.theEvilReaper.bot.api.command.CommandParser;
 import net.theEvilReaper.bot.api.interaction.InteractionType;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.provider.IClientProvider;
+import net.theEvilReaper.bot.api.user.IUserService;
 import net.theEvilReaper.bot.api.util.Conditions;
 
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
+
 
 /**
  * @author theEvilReaper
@@ -18,22 +20,21 @@ import java.util.regex.Pattern;
  * @since 1.0.0
  **/
 
-public class TeamSpeakListener implements TS3Listener {
+public class TeamSpeakListener implements TS3Listener, CommandParser {
 
     private static final Logger logger = Logger.getLogger("BotLogger");
 
-    private static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
-    private static final String COMMAND_SYMBOL = "!";
-
     private final int botID;
-    private final UserCommandProvider userCommandProvider;
+    private final CommandManager commandManager;
+    private final IUserService userService;
     private final IClientProvider clientProvider;
     private final UserInteraction clientInteraction;
 
-    public TeamSpeakListener(Batoidea batoidea, UserCommandProvider userCommandProvider) {
+    public TeamSpeakListener(Batoidea batoidea, CommandManager commandManager, IUserService userService) {
         this.botID = batoidea.getBotID();
-        this.userCommandProvider = userCommandProvider;
+        this.commandManager = commandManager;
         this.clientProvider = batoidea.getClientProvider();
+        this.userService = userService;
         this.clientInteraction = batoidea.getInteractionFactory().getInteraction(InteractionType.CLIENT, UserInteraction.class);
     }
 
@@ -50,16 +51,19 @@ public class TeamSpeakListener implements TS3Listener {
 
         logger.info("Received message " + message + " from: " + client.getNickname());
 
-        if (event.getMessage().startsWith(COMMAND_SYMBOL)) {
-            var split = SPLIT_PATTERN.split(message.replaceFirst(COMMAND_SYMBOL, ""));
-            String command = split[0];
-            String[] args = new String[split.length - 1];
-            if (split.length > 1) {
-                System.arraycopy(split, 1, args, 0, split.length - 1);
-            }
-            userCommandProvider.dispatch(client, command, args);
-        } else {
+        if (!event.getMessage().startsWith(commandManager.getCommandPrefix())) {
             clientInteraction.sendPrivateMessage(client, "I could not find the command: " + message + "Please type !help for help");
+            return;
         }
+
+        var user = userService.getUser(client.getDatabaseId());
+
+        if (user == null) {
+            logger.warning("A user missing an user object");
+            clientInteraction.sendPrivateMessage(client, "An error occurred when executing command. Please report this. Code: (MISSING USER)");
+            return;
+        }
+
+        this.parse(commandManager, user, message.replaceFirst(commandManager.getCommandPrefix(), ""));
     }
 }

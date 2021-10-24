@@ -6,6 +6,11 @@ import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import io.javalin.Javalin;
+import net.theEvilReaper.batoidea.command.CommandManagerImpl;
+import net.theEvilReaper.batoidea.command.commands.ExitCommand;
+import net.theEvilReaper.batoidea.command.commands.HelpCommand;
+import net.theEvilReaper.batoidea.command.commands.PongCommand;
+import net.theEvilReaper.batoidea.config.FileConfig;
 import net.theEvilReaper.batoidea.command.UserCommandProvider;
 import net.theEvilReaper.batoidea.command.user.PongCommand;
 import net.theEvilReaper.batoidea.command.user.SupportCommand;
@@ -74,8 +79,8 @@ public class Batoidea implements IBot {
     private final Identity identity;
     private final BotConfigImpl fileConfig;
     private final PropertyEventCall propertyEventCall;
+    private final CommandManagerImpl commandManager;
 
-    private UserCommandProvider userCommandProvider;
     private AbstractInteractionFactory interactionFactory;
 
     private BotState state = BotState.STOPPED;
@@ -96,6 +101,7 @@ public class Batoidea implements IBot {
         this.userService = new UserService();
         this.channelProvider = new ChannelProvider();
         this.propertyEventCall = new PropertyEventDispatcher(this);
+        this.commandManager = new CommandManagerImpl();
         connect();
     }
 
@@ -117,6 +123,8 @@ public class Batoidea implements IBot {
             setState(BotState.CONNECTING);
 
             try {
+                var lookup = TS3DNS.lookup("trainingsoase.net");
+                teamspeakClient.connect(lookup.get(0).getHostName(), 5000L);
                 var address = new InetSocketAddress(InetAddress.getByName(this.fileConfig.getServer()), 9987);
                 teamspeakClient.connect(address, "", this.fileConfig.getConnectionTimeout());
                 logger.info("Waiting for the connected state");
@@ -159,14 +167,13 @@ public class Batoidea implements IBot {
 
             var interaction = interactionFactory.getInteraction(InteractionType.CLIENT, UserInteraction.class);
 
-            this.userCommandProvider = new UserCommandProvider(logger, interaction);
             this.botInteraction = new BatoideaInteraction(teamspeakClient, botID);
             onLoad();
-            teamspeakClient.addListener(new TeamSpeakListener(this, userCommandProvider));
+            teamspeakClient.addListener(new TeamSpeakListener(this, commandManager, userService));
             teamspeakClient.addListener(new ClientListener(clientProvider, userService, logger, botID));
             teamspeakClient.addListener(new SupportListener(botID, supportService, (UserService) userService));
             this.supportService = new SupportService(interaction, 7564, 7552);
-            new BotConsoleService(logger, this);
+            new BotConsoleService(this, commandManager);
             registerCommands();
         }
 
@@ -178,9 +185,9 @@ public class Batoidea implements IBot {
     }
 
     private void registerCommands() {
-        userCommandProvider.registerCommand("pong", new PongCommand(interactionFactory));
-        userCommandProvider.registerCommand("support", new SupportCommand(this, getSupportService()));
-        userCommandProvider.registerCommand("support", new VerifyCommand(interactionFactory));
+        commandManager.register(new PongCommand());
+        commandManager.register(new ExitCommand(this));
+        commandManager.register(new HelpCommand());
     }
 
     protected void onLoad() {
