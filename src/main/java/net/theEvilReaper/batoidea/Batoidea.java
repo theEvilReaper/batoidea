@@ -6,7 +6,6 @@ import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.TS3DNS;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import io.javalin.Javalin;
 import net.theEvilReaper.batoidea.command.CommandManagerImpl;
 import net.theEvilReaper.batoidea.command.commands.ExitCommand;
 import net.theEvilReaper.batoidea.command.commands.HelpCommand;
@@ -173,8 +172,6 @@ public class Batoidea implements IBot {
             registerCommands();
         }
 
-        Javalin.createStandalone().get("/", context -> {});
-
         while (!stopping) {
             Thread.onSpinWait();
         }
@@ -187,10 +184,10 @@ public class Batoidea implements IBot {
     }
 
     protected void onLoad() {
-        /*if (!getTeamspeakClient().isConnected()) {
+        if (!teamspeakClient.isConnected()) {
             disconnect();
             return;
-        }*/
+        }
 
         try {
             for (Client client : teamspeakClient.listClients()) {
