@@ -14,8 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import static net.theEvilReaper.bot.api.util.Strings.*;
-
 /**
  * @author theEvilReaper
  * @version 1.0.0
@@ -62,7 +60,7 @@ public class CommandCallerImpl implements CommandCaller {
 
     @Override
     public CommandResult executeCommand(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
-        var result = getResult(command);
+        var result = getResult(command, args);
 
         if (result.type() != CommandResult.ResultType.UNKNOWN && result.command() != null) {
             var commandInstance = result.command();
@@ -79,21 +77,11 @@ public class CommandCallerImpl implements CommandCaller {
         return commandMap.getOrDefault(commandName, null);
     }
 
-    private CommandResult getResult(@NotNull String commandString) {
-        commandString = commandString.toLowerCase(Locale.ENGLISH);
-
-        var parts = SPLIT_PATTERN.split(commandString);
-        var commandName = parts[0];
-        var command = getCommand(commandName);
+    private CommandResult getResult(@NotNull String commandString, @Nullable String... args) {
+        var command = getCommand(commandString);
 
         if (command == null) {
             return CommandResult.ofUnknown(commandString);
-        }
-
-        var args = new String[parts.length - 1];
-
-        if (parts.length > 1) {
-            System.arraycopy(parts, 1, args, 0, parts.length - 1);
         }
 
         return CommandResult.of(commandString, command, CommandResult.ResultType.SUCCESS, args);
