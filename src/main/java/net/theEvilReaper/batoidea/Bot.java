@@ -10,6 +10,7 @@ import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.user.UserService;
 import net.theEvilReaper.bot.api.BotState;
 import net.theEvilReaper.bot.api.IBot;
+import net.theEvilReaper.bot.api.command.CommandManager;
 import net.theEvilReaper.bot.api.database.IRedisEventManager;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
 import net.theEvilReaper.bot.api.interaction.BotInteraction;
@@ -150,6 +151,11 @@ public class Bot implements IBot {
 
     @Override
     public IRedisEventManager getEventManager() {
+        return null;
+    }
+
+    @Override
+    public CommandManager getCommandManager() {
         return null;
     }
 

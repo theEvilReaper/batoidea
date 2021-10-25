@@ -25,6 +25,7 @@ import net.theEvilReaper.batoidea.listener.ClientListener;
 import net.theEvilReaper.batoidea.user.UserService;
 import net.theEvilReaper.bot.api.BotState;
 import net.theEvilReaper.bot.api.IBot;
+import net.theEvilReaper.bot.api.command.CommandManager;
 import net.theEvilReaper.bot.api.database.IRedisEventManager;
 import net.theEvilReaper.bot.api.identity.Identity;
 import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
@@ -278,10 +279,6 @@ public class Batoidea implements IBot {
         return botID;
     }
 
-    public LocalTeamspeakClientSocket getTeamspeakClient() {
-        return teamspeakClient;
-    }
-
     @Override
     public BotInteraction getBotInteraction() {
         return botInteraction;
@@ -321,8 +318,23 @@ public class Batoidea implements IBot {
         return null;
     }
 
+    /**
+     * Returns the implementation for the {@link PropertyEventCall}.
+     * @return the given instance
+     */
+
     @Override
     public PropertyEventCall getPropertyEventCall() {
         return propertyEventCall;
+    }
+
+    /**
+     * Returns the implementation from the {@link CommandManager}.
+     * @return the given instance
+     */
+
+    @Override
+    public CommandManagerImpl getCommandManager() {
+        return commandManager;
     }
 }
