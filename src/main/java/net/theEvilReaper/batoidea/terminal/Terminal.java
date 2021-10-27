@@ -31,7 +31,7 @@ public class Terminal implements CommandParser {
 
     public void startTerminal() {
         if (running) {
-            throw new IllegalCallerException("Can't start the terminal twice");
+            throw new IllegalCallerException("Can't start terminal twice");
         }
 
         if (inputThread != null) {
