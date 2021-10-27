@@ -17,7 +17,7 @@ public class ExitCommand extends Command {
     private final Batoidea batoidea;
 
     public ExitCommand(Batoidea batoidea) {
-        super("exit");
+        super("exit", "stop");
         this.batoidea = batoidea;
     }
 
