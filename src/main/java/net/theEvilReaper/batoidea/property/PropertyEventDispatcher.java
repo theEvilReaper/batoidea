@@ -67,7 +67,7 @@ public class PropertyEventDispatcher implements PropertyEventCall {
 
     /**
      * Removes a {@link PropertyChangeListener}.
-     * @param listener The listner to remove
+     * @param listener The listener to remove
      */
 
     @Override
