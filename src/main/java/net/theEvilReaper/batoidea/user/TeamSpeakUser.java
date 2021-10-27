@@ -49,10 +49,6 @@ public class TeamSpeakUser implements User {
         return new TeamSpeakUser(client, userInteraction);
     }
 
-    public void updateClientObject(Client client) {
-        this.client = client;
-    }
-
     @Override
     public void sendMessage(@NotNull String message) {
         this.userInteraction.sendPrivateMessage(client, message);
