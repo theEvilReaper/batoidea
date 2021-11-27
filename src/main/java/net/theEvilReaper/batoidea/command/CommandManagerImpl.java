@@ -7,7 +7,6 @@ import net.theEvilReaper.bot.api.command.CommandCallback;
 import net.theEvilReaper.bot.api.command.CommandCaller;
 import net.theEvilReaper.bot.api.command.CommandManager;
 import net.theEvilReaper.bot.api.command.CommandSender;
-import net.theEvilReaper.bot.api.command.ConsoleSender;
 import net.theEvilReaper.bot.api.command.result.CommandResult;
 import net.theEvilReaper.bot.api.util.Conditions;
 import org.jetbrains.annotations.NotNull;
