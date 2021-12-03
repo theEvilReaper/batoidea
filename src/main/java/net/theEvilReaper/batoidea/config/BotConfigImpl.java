@@ -6,7 +6,6 @@ import net.theEvilReaper.bot.api.config.Config;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,8 +27,10 @@ public class BotConfigImpl extends Config implements BotConfig {
     private final Logger logger;
     private final Path configPath;
 
-    public BotConfigImpl(Path directory) {
-        this.logger = Logger.getLogger("BotLogger");
+    private int[] blockedGroups;
+
+    public BotConfigImpl(Logger logger, Path directory) {
+        this.logger = logger;
         this.configPath = Paths.get(directory.toString(), FILE_NAME);
         this.load();
     }
@@ -71,6 +72,20 @@ public class BotConfigImpl extends Config implements BotConfig {
     }
 
     /**
+     * Overrides the underlying implementation of the method to reduce parsing of the array.
+     * @return The parsed array for the blocked groups
+     */
+
+    @Override
+    public int[] getBlockedGroups() {
+        if (blockedGroups == null) {
+            blockedGroups = BotConfig.super.getBlockedGroups();
+        }
+
+        return blockedGroups;
+    }
+
+    /**
      * Generates a default config
      */
 
@@ -80,9 +95,11 @@ public class BotConfigImpl extends Config implements BotConfig {
         this.properties.setProperty("name", "TeamSpeakBot");
         this.properties.setProperty("description", "I am bot <3");
         this.properties.setProperty("server", "");
+        this.properties.setProperty("port", "9987");
         this.properties.setProperty("password","");
         this.properties.setProperty("securityLevel", "0");
         this.properties.setProperty("connectionTimeOut", "5000");
         this.properties.setProperty("defaultChannel", "-1");
+        this.properties.setProperty("ignoreGroups", "");
     }
 }
