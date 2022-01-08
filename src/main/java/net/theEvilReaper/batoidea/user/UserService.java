@@ -10,9 +10,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserService<TeamSpeakUser> implements IUserService {
+public class UserService implements IUserService<TeamSpeakUser> {
 
-    private final Map<Integer, User> userMap;
+    private final Map<Integer, TeamSpeakUser> userMap;
     private final UserInteraction userInteraction;
 
     public UserService(UserInteraction userInteraction) {
@@ -21,7 +21,7 @@ public class UserService<TeamSpeakUser> implements IUserService {
     }
 
     @Override
-    public void add(@NotNull User user) {
+    public void add(@NotNull TeamSpeakUser user) {
         this.userMap.put(user.getID(), user);
     }
 
@@ -69,8 +69,13 @@ public class UserService<TeamSpeakUser> implements IUserService {
         return "UserService";
     }
 
+    /**
+     * Returns a Map which contains all current user which are online.
+     * @return the map which contains the user
+     */
+
     @Override
-    public Map<Integer, User> getUser() {
+    public Map<Integer, TeamSpeakUser> getUser() {
         return Collections.unmodifiableMap(this.userMap);
     }
 }
