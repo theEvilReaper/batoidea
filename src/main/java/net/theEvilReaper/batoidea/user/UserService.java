@@ -1,6 +1,5 @@
 package net.theEvilReaper.batoidea.user;
 
-import com.github.manevolent.ts3j.api.Client;
 import net.theEvilReaper.bot.api.interaction.UserInteraction;
 import net.theEvilReaper.bot.api.user.IUserService;
 import net.theEvilReaper.bot.api.user.User;
@@ -11,7 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserService implements IUserService {
+public class UserService<TeamSpeakUser> implements IUserService {
 
     private final Map<Integer, User> userMap;
     private final UserInteraction userInteraction;
@@ -22,12 +21,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void addUser(@NotNull Client client) {
-        this.userMap.putIfAbsent(client.getId(), TeamSpeakUser.of(client, userInteraction));
+    public void add(@NotNull User user) {
+        this.userMap.put(user.getID(), user);
     }
 
     @Override
-    public void removeUser(int clientID) {
+    public void remove(int clientID) {
         this.userMap.remove(clientID);
     }
 
