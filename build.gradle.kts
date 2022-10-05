@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     implementation(libs.batoideaApi)
+    //Dependencies for testing
     testImplementation(libs.junitApi)
     testImplementation(libs.mockitoCore)
     testImplementation(libs.mockitoJunit)
@@ -32,6 +33,11 @@ tasks {
     compileJava {
         options.encoding = "UTF-8"
         options.release.set(17)
+    }
+
+    jar {
+        dependsOn("shadowJar")
+        archiveFileName.set("${rootProject.name}.${archiveExtension.getOrElse("jar")}")
     }
 
     test {
