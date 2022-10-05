@@ -7,16 +7,16 @@ shadow = "7.1.2"
 junit = "5.9.0"
 mockito = "4.7.0"
 
-batoideaAPI = "1.0.0-SNAPSHOT"
+batoideaApi = "1.0.0-SNAPSHOT"
 
 [libraries]
-batoideaApi = {group = "net.theEvilReaper.batoidea", name = "batoidea-api", version.ref = "batoideaAPI"}
+batoideaApi = { group = "net.theEvilReaper.batoidea", name = "batoidea-api", version.ref = "batoideaApi" }
 
 # Testing
 junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
-mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "mockito"}
-mockitoJunit = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito"}
+mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockitoJunit = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
 
 [plugins]
 
