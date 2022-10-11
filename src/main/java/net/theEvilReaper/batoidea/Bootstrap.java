@@ -16,7 +16,7 @@ public class Bootstrap {
         System.setProperty("java.util.logging.SimpleFormatter.format","[%1$td.%1$tm.%1$ty %1$tH:%1$tM:%1$tS] %4$s: %5$s%n");
     }
 
-    private final static Logger logger = new BotLogger();
+    private static final Logger logger = new BotLogger();
 
     public static void main(String[] args) {
         logger.info("Starting...");
@@ -37,7 +37,6 @@ public class Bootstrap {
         if (args.length == 0) {
             logger.info("Loading configs from runtime path");
         }
-        // LogManager.getLogManager().addLogger(logger);
         new Batoidea(logger);
     }
 }
