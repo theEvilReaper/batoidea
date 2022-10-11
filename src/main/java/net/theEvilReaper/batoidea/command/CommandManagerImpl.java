@@ -17,12 +17,10 @@ import org.jetbrains.annotations.Nullable;
  * @version 1.0.0
  * @since 1.0.0
  **/
-public class CommandManagerImpl implements CommandManager {
+public final class CommandManagerImpl implements CommandManager {
 
-    private static String COMMAND_PREFIX = "/";
-
+    private static final String COMMAND_PREFIX = "/";
     private final CommandCaller dispatcher = new CommandCallerImpl();
-
     private CommandCallback unknownCommandCallback;
 
     public CommandManagerImpl() {
@@ -33,7 +31,6 @@ public class CommandManagerImpl implements CommandManager {
     /**
      * Register's some base commands.
      */
-
     private void registerBaseCommands() {
         register(new PongCommand());
         register(new HelpCommand());
@@ -44,9 +41,7 @@ public class CommandManagerImpl implements CommandManager {
         if (hasCommand(command.getName())) {
             //TODO: LOG
         }
-
         this.dispatcher.register(command);
-
     }
 
     @Override
@@ -54,7 +49,6 @@ public class CommandManagerImpl implements CommandManager {
         if (!hasCommand(command.getName())) {
             //TODO: LOG
         }
-
         this.dispatcher.unregister(command);
     }
 
@@ -62,12 +56,6 @@ public class CommandManagerImpl implements CommandManager {
     public boolean hasCommand(@NotNull String commandName) {
         Conditions.checkForEmpty(commandName);
         return this.dispatcher.getCommand(commandName) != null;
-    }
-
-    @Override
-    public void setCommandPrefix(@NotNull String prefix) {
-        Conditions.checkForEmpty(prefix);
-        COMMAND_PREFIX = prefix;
     }
 
     @Override
@@ -80,12 +68,9 @@ public class CommandManagerImpl implements CommandManager {
     public CommandResult executeCommand(@NotNull CommandSender sender, @NotNull String command, @Nullable String... args) {
         var result = this.dispatcher.executeCommand(sender, command, args);
 
-        if (result.type() == CommandResult.ResultType.UNKNOWN) {
-            if (unknownCommandCallback != null) {
-                this.unknownCommandCallback.apply(sender, command);
-            }
+        if (result.type() == CommandResult.ResultType.UNKNOWN && unknownCommandCallback != null) {
+            this.unknownCommandCallback.apply(sender, command);
         }
-
         return result;
     }
 
