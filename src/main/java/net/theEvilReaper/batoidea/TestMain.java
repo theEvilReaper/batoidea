@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea;
+package net.theevilreaper.batoidea;
 
 import java.util.logging.Logger;
 

@@ -1,6 +1,6 @@
-package net.theEvilReaper.batoidea;
+package net.theevilreaper.batoidea;
 
-import net.theEvilReaper.batoidea.logging.BotLogger;
+import net.theevilreaper.batoidea.logging.BotLogger;
 
 import java.util.logging.Logger;
 

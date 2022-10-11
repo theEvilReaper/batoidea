@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.database;
+package net.theevilreaper.batoidea.database;
 
 import net.theevilreaper.bot.api.database.RedisConnector;
 import net.theevilreaper.bot.api.database.RedisProcessor;

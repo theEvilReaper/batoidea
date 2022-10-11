@@ -1,8 +1,9 @@
-package net.theEvilReaper.batoidea.user;
+package net.theevilreaper.batoidea.user;
 
 import net.theevilreaper.bot.api.interaction.UserInteraction;
 import net.theevilreaper.bot.api.user.IUserService;
 import net.theevilreaper.bot.api.user.User;
+import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +47,7 @@ public class UserService implements IUserService<TeamSpeakUser> {
 
     @Override
     public void setReady(boolean ready) {
-        throw new RuntimeException("Not implemented for the user service");
+        throw new NotImplementedException("Not implemented for the user service");
     }
 
     /**

@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.provider;
+package net.theevilreaper.batoidea.provider;
 
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;

@@ -1,7 +1,7 @@
-package net.theEvilReaper.batoidea.command;
+package net.theevilreaper.batoidea.command;
 
-import net.theEvilReaper.batoidea.command.commands.HelpCommand;
-import net.theEvilReaper.batoidea.command.commands.PongCommand;
+import net.theevilreaper.batoidea.command.commands.HelpCommand;
+import net.theevilreaper.batoidea.command.commands.PongCommand;
 import net.theevilreaper.bot.api.command.Command;
 import net.theevilreaper.bot.api.command.CommandCallback;
 import net.theevilreaper.bot.api.command.CommandCaller;

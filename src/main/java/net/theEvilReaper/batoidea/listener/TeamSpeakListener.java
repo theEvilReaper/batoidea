@@ -1,15 +1,14 @@
-package net.theEvilReaper.batoidea.listener;
+package net.theevilreaper.batoidea.listener;
 
 import com.github.manevolent.ts3j.event.TS3Listener;
 import com.github.manevolent.ts3j.event.TextMessageEvent;
-import net.theEvilReaper.batoidea.Batoidea;
+import net.theevilreaper.batoidea.Batoidea;
 import net.theevilreaper.bot.api.command.CommandManager;
 import net.theevilreaper.bot.api.command.CommandParser;
 import net.theevilreaper.bot.api.interaction.InteractionType;
 import net.theevilreaper.bot.api.interaction.UserInteraction;
 import net.theevilreaper.bot.api.provider.IClientProvider;
 import net.theevilreaper.bot.api.user.IUserService;
-import net.theevilreaper.bot.api.util.Conditions;
 
 import java.util.logging.Logger;
 

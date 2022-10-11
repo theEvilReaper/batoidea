@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.database;
+package net.theevilreaper.batoidea.database;
 
 import net.theevilreaper.bot.api.database.MongoConnector;
 import net.theevilreaper.bot.api.database.MongoProcessor;

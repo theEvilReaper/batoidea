@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.interaction;
+package net.theevilreaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.command.CommandException;

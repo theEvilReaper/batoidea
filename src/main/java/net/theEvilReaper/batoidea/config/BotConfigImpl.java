@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.config;
+package net.theevilreaper.batoidea.config;
 
 import net.theevilreaper.bot.api.config.BotConfig;
 import net.theevilreaper.bot.api.config.Config;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import static net.theEvilReaper.batoidea.config.ConfigurationProvider.UTF_8_CHARSET;
+import static net.theevilreaper.batoidea.config.ConfigurationProvider.UTF_8_CHARSET;
 
 /**
  * @author theEvilReaper

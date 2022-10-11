@@ -1,9 +1,9 @@
-package net.theEvilReaper.batoidea.database.impl;
+package net.theevilreaper.batoidea.database.impl;
 
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import dev.morphia.mapping.MapperOptions;
-import net.theEvilReaper.batoidea.database.AbstractMongoProcessor;
+import net.theevilreaper.batoidea.database.AbstractMongoProcessor;
 import net.theevilreaper.bot.api.database.MongoConnector;
 import net.theevilreaper.bot.api.database.model.MongoModel;
 import org.bson.UuidRepresentation;

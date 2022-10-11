@@ -1,13 +1,13 @@
-package net.theEvilReaper.batoidea;
+package net.theevilreaper.batoidea;
 
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.batoidea.config.BotConfigImpl;
-import net.theEvilReaper.batoidea.interaction.InteractionFactory;
-import net.theEvilReaper.batoidea.property.PropertyEventDispatcher;
-import net.theEvilReaper.batoidea.provider.ChannelProvider;
-import net.theEvilReaper.batoidea.provider.ClientProvider;
-import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
-import net.theEvilReaper.batoidea.user.UserService;
+import net.theevilreaper.batoidea.config.BotConfigImpl;
+import net.theevilreaper.batoidea.interaction.InteractionFactory;
+import net.theevilreaper.batoidea.property.PropertyEventDispatcher;
+import net.theevilreaper.batoidea.provider.ChannelProvider;
+import net.theevilreaper.batoidea.provider.ClientProvider;
+import net.theevilreaper.batoidea.service.ServerRegistryImpl;
+import net.theevilreaper.batoidea.user.UserService;
 import net.theevilreaper.bot.api.BotState;
 import net.theevilreaper.bot.api.IBot;
 import net.theevilreaper.bot.api.command.CommandManager;

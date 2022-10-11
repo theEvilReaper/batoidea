@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.user;
+package net.theevilreaper.batoidea.user;
 
 import com.github.manevolent.ts3j.api.Client;
 import net.theevilreaper.bot.api.interaction.UserInteraction;

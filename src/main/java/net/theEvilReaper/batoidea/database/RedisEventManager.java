@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.database;
+package net.theevilreaper.batoidea.database;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

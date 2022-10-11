@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.config;
+package net.theevilreaper.batoidea.config;
 
 import net.theevilreaper.bot.api.config.BotConfig;
 import net.theevilreaper.bot.api.config.IConfig;

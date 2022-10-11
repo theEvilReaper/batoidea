@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.command.commands;
+package net.theevilreaper.batoidea.command.commands;
 
 import net.theevilreaper.bot.api.command.Command;
 import net.theevilreaper.bot.api.command.CommandSender;

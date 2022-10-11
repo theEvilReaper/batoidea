@@ -1,6 +1,6 @@
-package net.theEvilReaper.batoidea.command.commands;
+package net.theevilreaper.batoidea.command.commands;
 
-import net.theEvilReaper.batoidea.Batoidea;
+import net.theevilreaper.batoidea.Batoidea;
 import net.theevilreaper.bot.api.command.Command;
 import net.theevilreaper.bot.api.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
