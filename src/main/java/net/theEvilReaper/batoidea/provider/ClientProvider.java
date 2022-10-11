@@ -73,20 +73,6 @@ public class ClientProvider implements IClientProvider {
     }
 
     @Override
-    public Client recognizeClient(@NotNull Client client) {
-        try {
-            lock.lock();
-            var teamspeakClient = findClient(client);
-            if (teamspeakClient == null) {
-                this.clientMap.put(client.getId(), client);
-            }
-            return teamspeakClient;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
     public Client getClientByUniqueIdentifier(@NotNull String identifier) {
         try {
             return clientIdentifierCache.get(identifier, () -> {

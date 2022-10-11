@@ -37,22 +37,6 @@ public class ChannelProvider implements IChannelProvider {
     }
 
     @Override
-    public Channel recognizeChannel(@NotNull Channel channel) {
-        try {
-            lock.lock();
-            var teamSpeakChannel = this.channels.get(channel.getId());
-
-            if (teamSpeakChannel == null) {
-                channels.put(channel.getId(), channel);
-            }
-
-            return teamSpeakChannel;
-        } finally {
-             lock.unlock();
-        }
-    }
-
-    @Override
     public @Nullable Channel getChannelById(int channelId) {
         try {
             lock.lock();
