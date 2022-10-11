@@ -1,12 +1,14 @@
 package net.theevilreaper.batoidea;
 
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
+import net.theevilreaper.batoidea.command.CommandManagerImpl;
 import net.theevilreaper.batoidea.config.BotConfigImpl;
 import net.theevilreaper.batoidea.interaction.InteractionFactory;
 import net.theevilreaper.batoidea.property.PropertyEventDispatcher;
 import net.theevilreaper.batoidea.provider.ChannelProvider;
 import net.theevilreaper.batoidea.provider.ClientProvider;
 import net.theevilreaper.batoidea.service.ServerRegistryImpl;
+import net.theevilreaper.batoidea.user.TeamSpeakUser;
 import net.theevilreaper.batoidea.user.UserService;
 import net.theevilreaper.bot.api.BotState;
 import net.theevilreaper.bot.api.IBot;
@@ -23,6 +25,7 @@ import net.theevilreaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -30,44 +33,38 @@ import java.util.logging.Logger;
 
 public class Bot implements IBot {
 
+    private final UUID uuid = UUID.randomUUID();
     private final Logger logger = Logger.getLogger("BotLogger");
     private LocalTeamspeakClientSocket socket;
     private final BotConfigImpl botConfig;
     private final ServiceRegistry serviceRegistry;
     private final IChannelProvider channelProvider;
     private final IClientProvider clientProvider;
-    private final IUserService userService;
+    private final IUserService<TeamSpeakUser> userService;
     private final AbstractInteractionFactory interactionFactory;
     private final PropertyEventCall propertyEventCall;
-
+    private final CommandManager commandManager;
     private BotInteraction botInteraction;
-
     private volatile boolean stopping;
-
     private final Object stateLock = new Object();
     private BotState state = BotState.STOPPED;
-
     protected int botID;
+    private Date started;
 
     public Bot(@NotNull BotConfigImpl botConfig) {
         this.botConfig = botConfig;
         this.serviceRegistry = new ServerRegistryImpl();
         this.channelProvider = new ChannelProvider();
         this.clientProvider = new ClientProvider(logger, null);
-
-        //TODO: Fix npe
         this.interactionFactory = new InteractionFactory(socket);
-        this.userService = new UserService(null);
+        this.userService = new UserService<>();
         this.propertyEventCall = new PropertyEventDispatcher(this);
+        this.commandManager = new CommandManagerImpl();
     }
 
     @Override
     public void connect() {
         setState(BotState.STARTING);
-
-
-
-
         setState(BotState.RUNNING);
     }
 
@@ -78,6 +75,7 @@ public class Bot implements IBot {
                 socket.disconnect();
             } catch (IOException | TimeoutException | ExecutionException | InterruptedException e) {
                 logger.info("An error occurred when disconnecting from the server");
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -88,7 +86,7 @@ public class Bot implements IBot {
             if (this.state != state) {
                 logger.info("Change state " + this.state + " -> " + state);
                 if (state == BotState.RUNNING) {
-                   // this.started = new Date(System.currentTimeMillis());
+                   this.started = new Date(System.currentTimeMillis());
                 }
                 this.state = state;
                 this.stateLock.notifyAll();
@@ -102,12 +100,12 @@ public class Bot implements IBot {
     }
 
     @Override
-    public Logger getLogger() {
+    public @NotNull Logger getLogger() {
         return logger;
     }
 
     @Override
-    public BotState getState() {
+    public @NotNull BotState getState() {
         return state;
     }
 
@@ -117,37 +115,37 @@ public class Bot implements IBot {
     }
 
     @Override
-    public IUserService getUserService() {
+    public @NotNull IUserService getUserService() {
         return userService;
     }
 
     @Override
-    public IClientProvider getClientProvider() {
+    public @NotNull IClientProvider getClientProvider() {
         return clientProvider;
     }
 
     @Override
-    public IChannelProvider getChannelProvider() {
+    public @NotNull IChannelProvider getChannelProvider() {
         return channelProvider;
     }
 
     @Override
-    public ServiceRegistry getServiceRegistry() {
+    public @NotNull ServiceRegistry getServiceRegistry() {
         return serviceRegistry;
     }
 
     @Override
-    public BotInteraction getBotInteraction() {
+    public @NotNull BotInteraction getBotInteraction() {
         return botInteraction;
     }
 
     @Override
-    public AbstractInteractionFactory getInteractionFactory() {
+    public @NotNull AbstractInteractionFactory getInteractionFactory() {
         return interactionFactory;
     }
 
     @Override
-    public PropertyEventCall getPropertyEventCall() {
+    public @NotNull PropertyEventCall getPropertyEventCall() {
         return propertyEventCall;
     }
 
@@ -157,8 +155,8 @@ public class Bot implements IBot {
     }
 
     @Override
-    public CommandManager getCommandManager() {
-        return null;
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override
@@ -168,6 +166,6 @@ public class Bot implements IBot {
 
     @Override
     public @NotNull UUID getUUID() {
-        return null;
+        return uuid;
     }
 }
