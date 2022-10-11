@@ -4,7 +4,7 @@ import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import net.theEvilReaper.bot.api.provider.IClientProvider;
+import net.theevilreaper.bot.api.provider.IClientProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

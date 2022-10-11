@@ -2,10 +2,10 @@ package net.theEvilReaper.batoidea.database;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.theEvilReaper.bot.api.database.IRedisEventManager;
-import net.theEvilReaper.bot.api.database.REvent;
-import net.theEvilReaper.bot.api.database.RedisConnector;
-import net.theEvilReaper.bot.api.util.Conditions;
+import net.theevilreaper.bot.api.database.IRedisEventManager;
+import net.theevilreaper.bot.api.database.REvent;
+import net.theevilreaper.bot.api.database.RedisConnector;
+import net.theevilreaper.bot.api.util.Conditions;
 import org.jetbrains.annotations.NotNull;
 import org.redisson.api.RFuture;
 import org.redisson.api.RTopic;

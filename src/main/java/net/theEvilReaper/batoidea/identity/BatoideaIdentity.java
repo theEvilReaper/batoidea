@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.identity;
 
 import com.github.manevolent.ts3j.identity.LocalIdentity;
-import net.theEvilReaper.bot.api.identity.Identity;
+import net.theevilreaper.bot.api.identity.Identity;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

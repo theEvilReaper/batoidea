@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.property;
 
-import net.theEvilReaper.bot.api.property.PropertyEventCall;
-import net.theEvilReaper.bot.api.util.Conditions;
+import net.theevilreaper.bot.api.property.PropertyEventCall;
+import net.theevilreaper.bot.api.util.Conditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

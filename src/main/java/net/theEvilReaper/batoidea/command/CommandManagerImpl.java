@@ -2,13 +2,13 @@ package net.theEvilReaper.batoidea.command;
 
 import net.theEvilReaper.batoidea.command.commands.HelpCommand;
 import net.theEvilReaper.batoidea.command.commands.PongCommand;
-import net.theEvilReaper.bot.api.command.Command;
-import net.theEvilReaper.bot.api.command.CommandCallback;
-import net.theEvilReaper.bot.api.command.CommandCaller;
-import net.theEvilReaper.bot.api.command.CommandManager;
-import net.theEvilReaper.bot.api.command.CommandSender;
-import net.theEvilReaper.bot.api.command.result.CommandResult;
-import net.theEvilReaper.bot.api.util.Conditions;
+import net.theevilreaper.bot.api.command.Command;
+import net.theevilreaper.bot.api.command.CommandCallback;
+import net.theevilreaper.bot.api.command.CommandCaller;
+import net.theevilreaper.bot.api.command.CommandManager;
+import net.theevilreaper.bot.api.command.CommandSender;
+import net.theevilreaper.bot.api.command.result.CommandResult;
+import net.theevilreaper.bot.api.util.Conditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
  * @version 1.0.0
  * @since 1.0.0
  **/
-
 public class CommandManagerImpl implements CommandManager {
 
     private static String COMMAND_PREFIX = "/";

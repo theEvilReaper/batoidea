@@ -3,8 +3,8 @@ package net.theEvilReaper.batoidea.listener;
 import com.github.manevolent.ts3j.event.ClientJoinEvent;
 import com.github.manevolent.ts3j.event.ClientLeaveEvent;
 import com.github.manevolent.ts3j.event.TS3Listener;
-import net.theEvilReaper.bot.api.provider.IClientProvider;
-import net.theEvilReaper.bot.api.user.IUserService;
+import net.theevilreaper.bot.api.provider.IClientProvider;
+import net.theevilreaper.bot.api.user.IUserService;
 
 import java.util.logging.Logger;
 
@@ -48,6 +48,7 @@ public class ClientListener implements TS3Listener {
         if (event.getClientId() == botID) return;
         logger.info("The user with the id: " + event.getClientId() + " left the server");
         clientProvider.remove(event.getClientId());
-        iUserService.removeUser(event.getClientId());
+       //TODO: FIX that method
+        // iUserService.removeUser(event.getClientId());
     }
 }

@@ -2,7 +2,7 @@ package net.theEvilReaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.bot.api.interaction.BotInteraction;
+import net.theevilreaper.bot.api.interaction.BotInteraction;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

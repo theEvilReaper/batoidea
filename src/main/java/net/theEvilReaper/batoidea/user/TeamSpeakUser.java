@@ -1,8 +1,8 @@
 package net.theEvilReaper.batoidea.user;
 
 import com.github.manevolent.ts3j.api.Client;
-import net.theEvilReaper.bot.api.interaction.UserInteraction;
-import net.theEvilReaper.bot.api.user.User;
+import net.theevilreaper.bot.api.interaction.UserInteraction;
+import net.theevilreaper.bot.api.user.User;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -104,6 +104,11 @@ public class TeamSpeakUser implements User {
     @Override
     public void setLocale(Locale locale) {
         this.locale = locale == null ? Locale.ENGLISH : locale;
+    }
+
+    @Override
+    public int getID() {
+        return 0;
     }
 
     /**

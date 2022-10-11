@@ -1,8 +1,8 @@
 package net.theEvilReaper.batoidea.database;
 
-import net.theEvilReaper.bot.api.database.MongoConnector;
-import net.theEvilReaper.bot.api.database.MongoProcessor;
-import net.theEvilReaper.bot.api.database.model.MongoModel;
+import net.theevilreaper.bot.api.database.MongoConnector;
+import net.theevilreaper.bot.api.database.MongoProcessor;
+import net.theevilreaper.bot.api.database.model.MongoModel;
 import org.jetbrains.annotations.NotNull;
 
 /**

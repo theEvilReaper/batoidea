@@ -4,8 +4,8 @@ import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import dev.morphia.mapping.MapperOptions;
 import net.theEvilReaper.batoidea.database.AbstractMongoProcessor;
-import net.theEvilReaper.bot.api.database.MongoConnector;
-import net.theEvilReaper.bot.api.database.model.MongoModel;
+import net.theevilreaper.bot.api.database.MongoConnector;
+import net.theevilreaper.bot.api.database.model.MongoModel;
 import org.bson.UuidRepresentation;
 import org.jetbrains.annotations.NotNull;
 

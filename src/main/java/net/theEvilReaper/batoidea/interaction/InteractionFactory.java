@@ -1,9 +1,9 @@
 package net.theEvilReaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
-import net.theEvilReaper.bot.api.interaction.Interaction;
-import net.theEvilReaper.bot.api.interaction.InteractionType;
+import net.theevilreaper.bot.api.interaction.AbstractInteractionFactory;
+import net.theevilreaper.bot.api.interaction.Interaction;
+import net.theevilreaper.bot.api.interaction.InteractionType;
 import org.jetbrains.annotations.NotNull;
 
 /**

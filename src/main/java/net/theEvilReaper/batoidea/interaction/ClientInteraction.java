@@ -3,8 +3,8 @@ package net.theEvilReaper.batoidea.interaction;
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.bot.api.interaction.UserInteraction;
-import net.theEvilReaper.bot.api.util.Conditions;
+import net.theevilreaper.bot.api.interaction.UserInteraction;
+import net.theevilreaper.bot.api.util.Conditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

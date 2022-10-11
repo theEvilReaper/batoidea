@@ -8,20 +8,22 @@ import net.theEvilReaper.batoidea.provider.ChannelProvider;
 import net.theEvilReaper.batoidea.provider.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.user.UserService;
-import net.theEvilReaper.bot.api.BotState;
-import net.theEvilReaper.bot.api.IBot;
-import net.theEvilReaper.bot.api.command.CommandManager;
-import net.theEvilReaper.bot.api.database.IRedisEventManager;
-import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
-import net.theEvilReaper.bot.api.interaction.BotInteraction;
-import net.theEvilReaper.bot.api.property.PropertyEventCall;
-import net.theEvilReaper.bot.api.provider.IChannelProvider;
-import net.theEvilReaper.bot.api.provider.IClientProvider;
-import net.theEvilReaper.bot.api.service.ServiceRegistry;
-import net.theEvilReaper.bot.api.user.IUserService;
+import net.theevilreaper.bot.api.BotState;
+import net.theevilreaper.bot.api.IBot;
+import net.theevilreaper.bot.api.command.CommandManager;
+import net.theevilreaper.bot.api.config.BotConfig;
+import net.theevilreaper.bot.api.database.IRedisEventManager;
+import net.theevilreaper.bot.api.interaction.AbstractInteractionFactory;
+import net.theevilreaper.bot.api.interaction.BotInteraction;
+import net.theevilreaper.bot.api.property.PropertyEventCall;
+import net.theevilreaper.bot.api.provider.IChannelProvider;
+import net.theevilreaper.bot.api.provider.IClientProvider;
+import net.theevilreaper.bot.api.service.ServiceRegistry;
+import net.theevilreaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
@@ -159,7 +161,13 @@ public class Bot implements IBot {
         return null;
     }
 
-    public BotConfigImpl getBotConfig() {
+    @Override
+    public @NotNull BotConfig getConfig() {
         return botConfig;
+    }
+
+    @Override
+    public @NotNull UUID getUUID() {
+        return null;
     }
 }

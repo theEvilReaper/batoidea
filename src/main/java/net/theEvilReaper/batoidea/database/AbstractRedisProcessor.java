@@ -1,8 +1,8 @@
 package net.theEvilReaper.batoidea.database;
 
-import net.theEvilReaper.bot.api.database.RedisConnector;
-import net.theEvilReaper.bot.api.database.RedisProcessor;
-import net.theEvilReaper.bot.api.database.model.RedisModel;
+import net.theevilreaper.bot.api.database.RedisConnector;
+import net.theevilreaper.bot.api.database.RedisProcessor;
+import net.theevilreaper.bot.api.database.model.RedisModel;
 
 /**
  * @author theEvilReaper

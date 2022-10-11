@@ -1,6 +1,6 @@
 package net.theEvilReaper.batoidea.database.impl;
 
-import net.theEvilReaper.bot.api.database.RedisConnector;
+import net.theevilreaper.bot.api.database.RedisConnector;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

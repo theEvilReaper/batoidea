@@ -1,8 +1,8 @@
 package net.theEvilReaper.batoidea.user;
 
-import net.theEvilReaper.bot.api.interaction.UserInteraction;
-import net.theEvilReaper.bot.api.user.IUserService;
-import net.theEvilReaper.bot.api.user.User;
+import net.theevilreaper.bot.api.interaction.UserInteraction;
+import net.theevilreaper.bot.api.user.IUserService;
+import net.theevilreaper.bot.api.user.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

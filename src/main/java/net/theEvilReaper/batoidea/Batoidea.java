@@ -22,18 +22,19 @@ import net.theEvilReaper.batoidea.provider.ClientProvider;
 import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
 import net.theEvilReaper.batoidea.listener.ClientListener;
 import net.theEvilReaper.batoidea.user.UserService;
-import net.theEvilReaper.bot.api.BotState;
-import net.theEvilReaper.bot.api.IBot;
-import net.theEvilReaper.bot.api.command.CommandManager;
-import net.theEvilReaper.bot.api.database.IRedisEventManager;
-import net.theEvilReaper.bot.api.identity.Identity;
-import net.theEvilReaper.bot.api.interaction.AbstractInteractionFactory;
-import net.theEvilReaper.bot.api.interaction.BotInteraction;
-import net.theEvilReaper.bot.api.property.PropertyEventCall;
-import net.theEvilReaper.bot.api.provider.IChannelProvider;
-import net.theEvilReaper.bot.api.provider.IClientProvider;
-import net.theEvilReaper.bot.api.service.ServiceRegistry;
-import net.theEvilReaper.bot.api.user.IUserService;
+import net.theevilreaper.bot.api.BotState;
+import net.theevilreaper.bot.api.IBot;
+import net.theevilreaper.bot.api.command.CommandManager;
+import net.theevilreaper.bot.api.config.BotConfig;
+import net.theevilreaper.bot.api.database.IRedisEventManager;
+import net.theevilreaper.bot.api.identity.Identity;
+import net.theevilreaper.bot.api.interaction.AbstractInteractionFactory;
+import net.theevilreaper.bot.api.interaction.BotInteraction;
+import net.theevilreaper.bot.api.property.PropertyEventCall;
+import net.theevilreaper.bot.api.provider.IChannelProvider;
+import net.theevilreaper.bot.api.provider.IClientProvider;
+import net.theevilreaper.bot.api.service.ServiceRegistry;
+import net.theevilreaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -87,7 +89,7 @@ public class Batoidea implements IBot {
 
     public Batoidea(Logger logger) {
         this.logger = logger;
-        this.fileConfig = new BotConfigImpl(Paths.get(System.getProperty("user.dir")));
+        this.fileConfig = new BotConfigImpl(logger, Paths.get(System.getProperty("user.dir")));
         this.fileConfig.load();
         this.identity = new BatoideaIdentity(25);
         this.serviceRegistry = new ServerRegistryImpl();
@@ -333,5 +335,15 @@ public class Batoidea implements IBot {
     @Override
     public CommandManagerImpl getCommandManager() {
         return commandManager;
+    }
+
+    @Override
+    public @NotNull BotConfig getConfig() {
+        return null;
+    }
+
+    @Override
+    public @NotNull UUID getUUID() {
+        return null;
     }
 }

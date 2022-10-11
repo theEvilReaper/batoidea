@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.config;
 
-import net.theEvilReaper.bot.api.config.BotConfig;
-import net.theEvilReaper.bot.api.config.IConfig;
+import net.theevilreaper.bot.api.config.BotConfig;
+import net.theevilreaper.bot.api.config.IConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

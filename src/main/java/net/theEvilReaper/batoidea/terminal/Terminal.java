@@ -1,9 +1,10 @@
 package net.theEvilReaper.batoidea.terminal;
 
-import net.theEvilReaper.bot.api.command.CommandManager;
-import net.theEvilReaper.bot.api.command.CommandParser;
-import net.theEvilReaper.bot.api.command.CommandSender;
-import net.theEvilReaper.bot.api.command.ConsoleSender;
+import net.theevilreaper.bot.api.command.CommandManager;
+import net.theevilreaper.bot.api.command.CommandParser;
+import net.theevilreaper.bot.api.command.CommandSender;
+import net.theevilreaper.bot.api.command.ConsoleSender;
+
 import java.util.Scanner;
 import java.util.logging.Logger;
 

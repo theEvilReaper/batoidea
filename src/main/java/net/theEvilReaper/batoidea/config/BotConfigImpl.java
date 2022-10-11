@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.config;
 
-import net.theEvilReaper.bot.api.config.BotConfig;
-import net.theEvilReaper.bot.api.config.Config;
+import net.theevilreaper.bot.api.config.BotConfig;
+import net.theevilreaper.bot.api.config.Config;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

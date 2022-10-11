@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.provider;
 
 import com.github.manevolent.ts3j.api.Channel;
-import net.theEvilReaper.bot.api.provider.IChannelProvider;
+import net.theevilreaper.bot.api.provider.IChannelProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

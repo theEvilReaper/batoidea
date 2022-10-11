@@ -3,13 +3,13 @@ package net.theEvilReaper.batoidea.listener;
 import com.github.manevolent.ts3j.event.TS3Listener;
 import com.github.manevolent.ts3j.event.TextMessageEvent;
 import net.theEvilReaper.batoidea.Batoidea;
-import net.theEvilReaper.bot.api.command.CommandManager;
-import net.theEvilReaper.bot.api.command.CommandParser;
-import net.theEvilReaper.bot.api.interaction.InteractionType;
-import net.theEvilReaper.bot.api.interaction.UserInteraction;
-import net.theEvilReaper.bot.api.provider.IClientProvider;
-import net.theEvilReaper.bot.api.user.IUserService;
-import net.theEvilReaper.bot.api.util.Conditions;
+import net.theevilreaper.bot.api.command.CommandManager;
+import net.theevilreaper.bot.api.command.CommandParser;
+import net.theevilreaper.bot.api.interaction.InteractionType;
+import net.theevilreaper.bot.api.interaction.UserInteraction;
+import net.theevilreaper.bot.api.provider.IClientProvider;
+import net.theevilreaper.bot.api.user.IUserService;
+import net.theevilreaper.bot.api.util.Conditions;
 
 import java.util.logging.Logger;
 
@@ -40,7 +40,8 @@ public class TeamSpeakListener implements TS3Listener, CommandParser {
     @Override
     public void onTextMessage(TextMessageEvent event) {
         if (event.getInvokerId() == botID) return; //Ignore our own sent messages
-        if (!Conditions.isPrivatChannel(event.getTargetMode())) return;
+        //TODO: FIX that method
+        //if (!Conditions.isPrivatChannel(event.getTargetMode())) return;
 
         var message = event.getMessage().trim();
 

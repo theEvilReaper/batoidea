@@ -1,7 +1,7 @@
 package net.theEvilReaper.batoidea.service;
 
-import net.theEvilReaper.bot.api.service.IService;
-import net.theEvilReaper.bot.api.service.ServiceRegistry;
+import net.theevilreaper.bot.api.service.IService;
+import net.theevilreaper.bot.api.service.ServiceRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
