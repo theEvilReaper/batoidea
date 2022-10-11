@@ -4,6 +4,7 @@ import net.theevilreaper.bot.api.config.BotConfig;
 import net.theevilreaper.bot.api.config.IConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.tinylog.Logger;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -11,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
 
 /**
  * @author theEvilReaper
@@ -25,30 +25,28 @@ public class ConfigurationProvider {
     private static final String ENVIRONMENT = System.getProperty("user.dir");
 
     private static final String CONFIG_FOLDER = File.pathSeparator + "config";
-    private final Logger logger;
     private final Path rootPath;
 
     private final BotConfig botConfig;
 
-    public ConfigurationProvider(@NotNull Logger logger) {
+    public ConfigurationProvider() {
         BotConfig botConfig1;
-        this.logger = logger;
         this.rootPath = Paths.get(ENVIRONMENT);
 
         if (!Files.exists(Paths.get(rootPath.toString(), CONFIG_FOLDER))) {
-            logger.info("Creating folder for the config...");
-            botConfig1 = new BotConfigImpl(logger, rootPath);
+            Logger.info("Creating folder for the config...");
+            botConfig1 = new BotConfigImpl(rootPath);
             ((BotConfigImpl) botConfig1).generateDefaultConfig();
         }
 
-        botConfig = new BotConfigImpl(logger, rootPath);
+        botConfig = new BotConfigImpl(rootPath);
     }
 
     @Nullable
     public IConfig loadConfig(@NotNull Path path) {
         if (!Files.exists(path)) {
-            logger.info("Unable to load the file at the path: " + path);
-            logger.info("Please check if the path is correct");
+            Logger.info("Unable to load the file at the path: {}", path);
+            Logger.info("Please check if the path is correct");
         }
         return null;
     }

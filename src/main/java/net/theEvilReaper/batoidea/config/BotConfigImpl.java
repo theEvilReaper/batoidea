@@ -2,6 +2,8 @@ package net.theevilreaper.batoidea.config;
 
 import net.theevilreaper.bot.api.config.BotConfig;
 import net.theevilreaper.bot.api.config.Config;
+import org.jetbrains.annotations.NotNull;
+import org.tinylog.Logger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import static net.theevilreaper.batoidea.config.ConfigurationProvider.UTF_8_CHARSET;
 
@@ -24,13 +25,11 @@ public class BotConfigImpl extends Config implements BotConfig {
 
     private static final String FILE_NAME = "config.properties";
 
-    private final Logger logger;
     private final Path configPath;
 
     private int[] blockedGroups;
 
-    public BotConfigImpl(Logger logger, Path directory) {
-        this.logger = logger;
+    public BotConfigImpl(@NotNull Path directory) {
         this.configPath = Paths.get(directory.toString(), FILE_NAME);
         this.load();
     }
@@ -43,18 +42,18 @@ public class BotConfigImpl extends Config implements BotConfig {
     @Override
     public void load() {
       if (!Files.exists(configPath)) {
-            this.logger.info("No config found. Creating config from scratch");
+            Logger.info("No config found. Creating config from scratch");
             this.generateDefaultConfig();
             this.save();
         } else {
-          this.logger.info("Loading config file");
+          Logger.info("Loading config file");
           this.properties = new Properties();
           try (InputStream inputStream = Files.newInputStream(this.configPath)) {
                 this.properties.load(new InputStreamReader(inputStream, UTF_8_CHARSET));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-          this.logger.info("Config successfully loaded");
+          Logger.info("Config successfully loaded");
         }
     }
 
@@ -91,7 +90,6 @@ public class BotConfigImpl extends Config implements BotConfig {
 
     protected void generateDefaultConfig() {
         this.properties = new Properties();
-
         this.properties.setProperty("name", "TeamSpeakBot");
         this.properties.setProperty("description", "I am bot <3");
         this.properties.setProperty("server", "");

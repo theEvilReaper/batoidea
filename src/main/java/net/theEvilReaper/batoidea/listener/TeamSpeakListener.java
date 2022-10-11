@@ -10,18 +10,17 @@ import net.theevilreaper.bot.api.interaction.InteractionType;
 import net.theevilreaper.bot.api.interaction.UserInteraction;
 import net.theevilreaper.bot.api.provider.IClientProvider;
 import net.theevilreaper.bot.api.user.IUserService;
+import net.theevilreaper.bot.api.util.Conditions;
+import org.jetbrains.annotations.NotNull;
+import org.tinylog.Logger;
 
-import java.util.logging.Logger;
 
 /**
  * @author theEvilReaper
  * @version 1.0.0
  * @since 1.0.0
  **/
-
 public class TeamSpeakListener implements TS3Listener, CommandParser {
-
-    private static final Logger logger = Logger.getLogger("BotLogger");
 
     private final int botID;
     private final CommandManager commandManager;
@@ -29,7 +28,7 @@ public class TeamSpeakListener implements TS3Listener, CommandParser {
     private final IClientProvider clientProvider;
     private final UserInteraction clientInteraction;
 
-    public TeamSpeakListener(Batoidea batoidea, CommandManager commandManager, IUserService<TeamSpeakUser> userService) {
+    public TeamSpeakListener(@NotNull Batoidea batoidea, @NotNull CommandManager commandManager, @NotNull IUserService<TeamSpeakUser> userService) {
         this.botID = batoidea.getBotID();
         this.commandManager = commandManager;
         this.clientProvider = batoidea.getClientProvider();
@@ -38,10 +37,9 @@ public class TeamSpeakListener implements TS3Listener, CommandParser {
     }
 
     @Override
-    public void onTextMessage(TextMessageEvent event) {
+    public void onTextMessage(@NotNull TextMessageEvent event) {
         if (event.getInvokerId() == botID) return; //Ignore our own sent messages
-        //TODO: FIX that method
-        //if (!Conditions.isPrivatChannel(event.getTargetMode())) return;
+        if (!Conditions.hasPrivateChannel(event.getTargetMode())) return;
 
         var message = event.getMessage().trim();
 
@@ -51,7 +49,7 @@ public class TeamSpeakListener implements TS3Listener, CommandParser {
 
         if (client == null) return;
 
-        logger.info("Received message " + message + " from: " + client.getNickname());
+        Logger.info("Received message {} from: {}", message, client.getNickname());
 
         if (!event.getMessage().startsWith(commandManager.getCommandPrefix())) {
             clientInteraction.sendPrivateMessage(client, "I could not find the command: " + message + "Please type !help for help");
@@ -61,7 +59,7 @@ public class TeamSpeakListener implements TS3Listener, CommandParser {
         var user = userService.getUser(client.getDatabaseId());
 
         if (user == null) {
-            logger.warning("A user missing an user object");
+            Logger.warn("A user missing an user object");
             clientInteraction.sendPrivateMessage(client, "An error occurred when executing command. Please report this. Code: (MISSING USER)");
             return;
         }
