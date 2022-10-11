@@ -158,7 +158,6 @@ public class RedisEventManager implements IRedisEventManager {
                 }
             });
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
-            //TODO: Check result in the log
             logger.warning(exception.getLocalizedMessage());
         }
     }
