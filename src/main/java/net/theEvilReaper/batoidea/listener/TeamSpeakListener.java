@@ -3,6 +3,7 @@ package net.theevilreaper.batoidea.listener;
 import com.github.manevolent.ts3j.event.TS3Listener;
 import com.github.manevolent.ts3j.event.TextMessageEvent;
 import net.theevilreaper.batoidea.Batoidea;
+import net.theevilreaper.batoidea.user.TeamSpeakUser;
 import net.theevilreaper.bot.api.command.CommandManager;
 import net.theevilreaper.bot.api.command.CommandParser;
 import net.theevilreaper.bot.api.interaction.InteractionType;
@@ -24,11 +25,11 @@ public class TeamSpeakListener implements TS3Listener, CommandParser {
 
     private final int botID;
     private final CommandManager commandManager;
-    private final IUserService userService;
+    private final IUserService<TeamSpeakUser> userService;
     private final IClientProvider clientProvider;
     private final UserInteraction clientInteraction;
 
-    public TeamSpeakListener(Batoidea batoidea, CommandManager commandManager, IUserService userService) {
+    public TeamSpeakListener(Batoidea batoidea, CommandManager commandManager, IUserService<TeamSpeakUser> userService) {
         this.botID = batoidea.getBotID();
         this.commandManager = commandManager;
         this.clientProvider = batoidea.getClientProvider();

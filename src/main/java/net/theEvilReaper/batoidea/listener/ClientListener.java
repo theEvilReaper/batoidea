@@ -3,6 +3,7 @@ package net.theevilreaper.batoidea.listener;
 import com.github.manevolent.ts3j.event.ClientJoinEvent;
 import com.github.manevolent.ts3j.event.ClientLeaveEvent;
 import com.github.manevolent.ts3j.event.TS3Listener;
+import net.theevilreaper.batoidea.user.TeamSpeakUser;
 import net.theevilreaper.bot.api.provider.IClientProvider;
 import net.theevilreaper.bot.api.user.IUserService;
 
@@ -18,10 +19,10 @@ public class ClientListener implements TS3Listener {
 
     private final Logger logger;
     private final IClientProvider clientProvider;
-    private final IUserService iUserService;
+    private final IUserService<TeamSpeakUser> iUserService;
     private final int botID;
 
-    public ClientListener(IClientProvider clientProvider, IUserService userService, Logger logger, int botID) {
+    public ClientListener(IClientProvider clientProvider, IUserService<TeamSpeakUser> userService, Logger logger, int botID) {
         this.logger = logger;
         this.clientProvider = clientProvider;
         this.iUserService = userService;
@@ -48,7 +49,6 @@ public class ClientListener implements TS3Listener {
         if (event.getClientId() == botID) return;
         logger.info("The user with the id: " + event.getClientId() + " left the server");
         clientProvider.remove(event.getClientId());
-       //TODO: FIX that method
-        // iUserService.removeUser(event.getClientId());
+        iUserService.remove(event.getClientId());
     }
 }

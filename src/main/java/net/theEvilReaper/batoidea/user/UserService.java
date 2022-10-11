@@ -1,6 +1,5 @@
 package net.theevilreaper.batoidea.user;
 
-import net.theevilreaper.bot.api.interaction.UserInteraction;
 import net.theevilreaper.bot.api.user.IUserService;
 import net.theevilreaper.bot.api.user.User;
 import org.apache.commons.lang.NotImplementedException;
@@ -11,18 +10,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserService implements IUserService<TeamSpeakUser> {
+public class UserService<T extends User> implements IUserService<T> {
 
-    private final Map<Integer, TeamSpeakUser> userMap;
-    private final UserInteraction userInteraction;
+    private final Map<Integer, T> userMap;
 
-    public UserService(UserInteraction userInteraction) {
-        this.userInteraction = userInteraction;
+    public UserService() {
         this.userMap = new HashMap<>();
     }
 
     @Override
-    public void add(@NotNull TeamSpeakUser user) {
+    public void add(@NotNull T user) {
         this.userMap.put(user.getID(), user);
     }
 
@@ -54,7 +51,6 @@ public class UserService implements IUserService<TeamSpeakUser> {
      * Returns if the service is ready.
      * @return the underlying boolean value
      */
-
     @Override
     public boolean isReady() {
         return true;
@@ -64,7 +60,6 @@ public class UserService implements IUserService<TeamSpeakUser> {
      * Returns the name of the service.
      * @return the given name
      */
-
     @Override
     public String getName() {
         return "UserService";
@@ -74,9 +69,8 @@ public class UserService implements IUserService<TeamSpeakUser> {
      * Returns a Map which contains all current user which are online.
      * @return the map which contains the user
      */
-
     @Override
-    public Map<Integer, TeamSpeakUser> getUser() {
+    public Map<Integer, T> getUser() {
         return Collections.unmodifiableMap(this.userMap);
     }
 }
