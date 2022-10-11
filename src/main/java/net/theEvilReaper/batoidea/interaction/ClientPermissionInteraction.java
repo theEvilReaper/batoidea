@@ -24,6 +24,7 @@ public record ClientPermissionInteraction(@NotNull LocalTeamspeakClientSocket cl
             client.clientAddPermission(clientDatabaseID, permissions);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -33,6 +34,7 @@ public record ClientPermissionInteraction(@NotNull LocalTeamspeakClientSocket cl
             client.clientDeletePermission(clientDatabaseID, permissions);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

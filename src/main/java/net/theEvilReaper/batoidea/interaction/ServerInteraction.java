@@ -25,6 +25,7 @@ public record ServerInteraction(LocalTeamspeakClientSocket clientSocket) impleme
             this.clientSocket.sendServerMessage(message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

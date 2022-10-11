@@ -23,6 +23,7 @@ public record ServerGroupInteraction(@NotNull LocalTeamspeakClientSocket teamspe
             teamspeakClient.serverGroupAddClient(groupId, client.getDatabaseId());
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -32,6 +33,7 @@ public record ServerGroupInteraction(@NotNull LocalTeamspeakClientSocket teamspe
             teamspeakClient.serverGroupRemoveClient(groupId, client.getDatabaseId());
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

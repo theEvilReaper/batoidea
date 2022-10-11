@@ -27,6 +27,7 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
             teamspeakClient.sendPrivateMessage(client.getId(), message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -40,6 +41,7 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
             teamspeakClient.clientMove(client.getId(), channelId, password);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -50,6 +52,7 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
             teamspeakClient.kick(Collections.singletonList(client.getId()), message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -60,6 +63,7 @@ public record ClientInteraction(@NotNull LocalTeamspeakClientSocket teamspeakCli
             teamspeakClient.clientPoke(clientID, message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }
