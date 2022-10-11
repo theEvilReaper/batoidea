@@ -19,7 +19,6 @@ import java.util.logging.Logger;
  * @since 1.0.0
  **/
 
-//TODO: Finish the provider
 public class ConfigurationProvider {
 
     public static final Charset UTF_8_CHARSET = StandardCharsets.UTF_8;
@@ -42,9 +41,7 @@ public class ConfigurationProvider {
             ((BotConfigImpl) botConfig1).generateDefaultConfig();
         }
 
-        botConfig1 = null;
-        //botConfig = new BotConfigImpl(rootPath);
-        botConfig = botConfig1;
+        botConfig = new BotConfigImpl(logger, rootPath);
     }
 
     @Nullable
