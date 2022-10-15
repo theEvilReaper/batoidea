@@ -24,7 +24,7 @@ public class InteractionFactory extends AbstractInteractionFactory {
      * @param socket The socket from the {@link LocalTeamspeakClientSocket}
      */
 
-    public InteractionFactory(LocalTeamspeakClientSocket socket) {
+    public InteractionFactory(@NotNull LocalTeamspeakClientSocket socket) {
         this.interactions = new Interaction[InteractionType.getValues().length];
         this.interactions[0] = new ClientInteraction(socket);
         this.interactions[1] = new ServerGroupInteraction(socket);
