@@ -6,24 +6,21 @@ import com.github.manevolent.ts3j.event.TS3Listener;
 import net.theevilreaper.batoidea.user.TeamSpeakUser;
 import net.theevilreaper.bot.api.provider.IClientProvider;
 import net.theevilreaper.bot.api.user.IUserService;
-
-import java.util.logging.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.tinylog.Logger;
 
 /**
  * @author theEvilReaper
  * @version 1.0.0
  * @since 1.0.0
  **/
-
 public class ClientListener implements TS3Listener {
 
-    private final Logger logger;
     private final IClientProvider clientProvider;
     private final IUserService<TeamSpeakUser> iUserService;
     private final int botID;
 
-    public ClientListener(IClientProvider clientProvider, IUserService<TeamSpeakUser> userService, Logger logger, int botID) {
-        this.logger = logger;
+    public ClientListener(@NotNull IClientProvider clientProvider, @NotNull IUserService<TeamSpeakUser> userService, int botID) {
         this.clientProvider = clientProvider;
         this.iUserService = userService;
         this.botID = botID;
@@ -36,18 +33,18 @@ public class ClientListener implements TS3Listener {
         var client = clientProvider.getClientById(event.getClientId());
 
         if (client == null) {
-            logger.info("A client was null");
+            Logger.info("A client was null");
             return;
         }
 
-        logger.info("The user " + client.getNickname() + " joined the server");
+        Logger.info("The user {} joined the server", client.getNickname());
         clientProvider.add(client);
     }
 
     @Override
     public void onClientLeave(ClientLeaveEvent event) {
         if (event.getClientId() == botID) return;
-        logger.info("The user with the id: " + event.getClientId() + " left the server");
+        Logger.info("The user with the id: {} left the server", event.getClientId());
         clientProvider.remove(event.getClientId());
         iUserService.remove(event.getClientId());
     }

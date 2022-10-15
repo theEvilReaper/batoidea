@@ -23,18 +23,17 @@ import net.theevilreaper.bot.api.provider.IClientProvider;
 import net.theevilreaper.bot.api.service.ServiceRegistry;
 import net.theevilreaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Logger;
 
 public class Bot implements IBot {
 
     private final UUID uuid = UUID.randomUUID();
-    private final Logger logger = Logger.getLogger("BotLogger");
     private LocalTeamspeakClientSocket socket;
     private final BotConfigImpl botConfig;
     private final ServiceRegistry serviceRegistry;
@@ -55,7 +54,7 @@ public class Bot implements IBot {
         this.botConfig = botConfig;
         this.serviceRegistry = new ServerRegistryImpl();
         this.channelProvider = new ChannelProvider();
-        this.clientProvider = new ClientProvider(logger, null);
+        this.clientProvider = new ClientProvider(socket);
         this.interactionFactory = new InteractionFactory(socket);
         this.userService = new UserService<>();
         this.propertyEventCall = new PropertyEventDispatcher(this);
@@ -74,7 +73,7 @@ public class Bot implements IBot {
             try {
                 socket.disconnect();
             } catch (IOException | TimeoutException | ExecutionException | InterruptedException e) {
-                logger.info("An error occurred when disconnecting from the server");
+                Logger.info("An error occurred when disconnecting from the server");
                 Thread.currentThread().interrupt();
             }
         }
@@ -84,7 +83,7 @@ public class Bot implements IBot {
     public void setState(@NotNull BotState state) {
         synchronized (this.stateLock) {
             if (this.state != state) {
-                logger.info("Change state " + this.state + " -> " + state);
+                Logger.info("Change state {} -> {}", this.state, state);
                 if (state == BotState.RUNNING) {
                    this.started = new Date(System.currentTimeMillis());
                 }
@@ -97,11 +96,6 @@ public class Bot implements IBot {
     @Override
     public boolean isConnected() {
         return socket != null && socket.isConnected();
-    }
-
-    @Override
-    public @NotNull Logger getLogger() {
-        return logger;
     }
 
     @Override
