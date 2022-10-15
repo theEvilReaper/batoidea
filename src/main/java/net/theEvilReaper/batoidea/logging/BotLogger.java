@@ -17,6 +17,7 @@ import java.util.logging.SimpleFormatter;
  * @version 1.0.0
  * @since 1.0.0
  **/
+@Deprecated(forRemoval = true, since = "Use the logger from TinyLogger instead")
 public class BotLogger extends Logger {
 
     public BotLogger() {
