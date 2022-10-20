@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea;
+package net.theevilreaper.batoidea;
 
 import com.github.manevolent.ts3j.api.Channel;
 import com.github.manevolent.ts3j.api.Client;
@@ -6,22 +6,24 @@ import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.TS3DNS;
 import com.github.manevolent.ts3j.protocol.client.ClientConnectionState;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
-import net.theEvilReaper.batoidea.command.CommandManagerImpl;
-import net.theEvilReaper.batoidea.command.commands.ExitCommand;
-import net.theEvilReaper.batoidea.command.commands.HelpCommand;
-import net.theEvilReaper.batoidea.command.commands.PongCommand;
-import net.theEvilReaper.batoidea.config.BotConfigImpl;
-import net.theEvilReaper.batoidea.terminal.Terminal;
-import net.theEvilReaper.batoidea.identity.BatoideaIdentity;
-import net.theEvilReaper.batoidea.interaction.BatoideaInteraction;
-import net.theEvilReaper.batoidea.interaction.InteractionFactory;
-import net.theEvilReaper.batoidea.listener.TeamSpeakListener;
-import net.theEvilReaper.batoidea.property.PropertyEventDispatcher;
-import net.theEvilReaper.batoidea.provider.ChannelProvider;
-import net.theEvilReaper.batoidea.provider.ClientProvider;
-import net.theEvilReaper.batoidea.service.ServerRegistryImpl;
-import net.theEvilReaper.batoidea.listener.ClientListener;
-import net.theEvilReaper.batoidea.user.UserService;
+import net.theevilreaper.batoidea.command.CommandManagerImpl;
+import net.theevilreaper.batoidea.command.commands.ExitCommand;
+import net.theevilreaper.batoidea.command.commands.HelpCommand;
+import net.theevilreaper.batoidea.command.commands.PongCommand;
+import net.theevilreaper.batoidea.config.BotConfigImpl;
+import net.theevilreaper.batoidea.config.ConfigurationProvider;
+import net.theevilreaper.batoidea.terminal.Terminal;
+import net.theevilreaper.batoidea.identity.BatoideaIdentity;
+import net.theevilreaper.batoidea.interaction.BatoideaInteraction;
+import net.theevilreaper.batoidea.interaction.InteractionFactory;
+import net.theevilreaper.batoidea.listener.TeamSpeakListener;
+import net.theevilreaper.batoidea.property.PropertyEventDispatcher;
+import net.theevilreaper.batoidea.provider.ChannelProvider;
+import net.theevilreaper.batoidea.provider.ClientProvider;
+import net.theevilreaper.batoidea.service.ServerRegistryImpl;
+import net.theevilreaper.batoidea.listener.ClientListener;
+import net.theevilreaper.batoidea.user.TeamSpeakUser;
+import net.theevilreaper.batoidea.user.UserService;
 import net.theevilreaper.bot.api.BotState;
 import net.theevilreaper.bot.api.IBot;
 import net.theevilreaper.bot.api.command.CommandManager;
@@ -36,6 +38,7 @@ import net.theevilreaper.bot.api.provider.IClientProvider;
 import net.theevilreaper.bot.api.service.ServiceRegistry;
 import net.theevilreaper.bot.api.user.IUserService;
 import org.jetbrains.annotations.NotNull;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -45,8 +48,6 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author theEvilReaper
@@ -59,47 +60,38 @@ public class Batoidea implements IBot {
     private static final int BOT_GROUP = 1149;
     private static final int BOT_MUSIC_GROUP = 1144;
 
-    private int botID;
-
     public static LocalTeamspeakClientSocket teamspeakClient;
-
+    private int botID;
     private volatile boolean stopping;
-
     private final Object stateLock = new Object();
-    private final Logger logger;
     private final ServiceRegistry serviceRegistry;
     private final IChannelProvider channelProvider;
-    private final IUserService userService;
+    private final IUserService<TeamSpeakUser> userService;
     private final Identity identity;
     private final BotConfigImpl fileConfig;
     private final PropertyEventCall propertyEventCall;
     private final CommandManagerImpl commandManager;
+    private final UUID uuid = UUID.randomUUID();
     private final Terminal terminal;
-
-
     private AbstractInteractionFactory interactionFactory;
-
     private BotState state = BotState.STOPPED;
     private Date started;
-
     private BotInteraction botInteraction;
     private IClientProvider clientProvider;
+    private BotConfig config;
 
-    private IRedisEventManager iRedisEventManager;
-
-    public Batoidea(Logger logger) {
-        this.logger = logger;
-        this.fileConfig = new BotConfigImpl(logger, Paths.get(System.getProperty("user.dir")));
+    public Batoidea() {
+        this.fileConfig = new BotConfigImpl(Paths.get(System.getProperty("user.dir")));
         this.fileConfig.load();
         this.identity = new BatoideaIdentity(25);
         this.serviceRegistry = new ServerRegistryImpl();
-        //TODO: FIX NPE
-        this.userService = new UserService(null);
+        this.userService = new UserService<>();
         this.channelProvider = new ChannelProvider();
         this.propertyEventCall = new PropertyEventDispatcher(this);
         this.commandManager = new CommandManagerImpl();
         this.terminal = new Terminal(this.commandManager);
         this.terminal.startTerminal();
+        this.config = new ConfigurationProvider().getBotConfig();
         connect();
     }
 
@@ -116,7 +108,7 @@ public class Batoidea implements IBot {
             teamspeakClient.setIdentity(this.identity.getIdentity());
             teamspeakClient.setHWID("Windows");
             teamspeakClient.setExceptionHandler(throwable ->
-                    logger.log(Level.WARNING, "There is an error: ", throwable));
+                    Logger.warn("There is an error: {}", throwable));
 
             setState(BotState.CONNECTING);
 
@@ -125,34 +117,37 @@ public class Batoidea implements IBot {
                 teamspeakClient.connect(lookup.get(0).getHostName(), 5000L);
                 var address = new InetSocketAddress(InetAddress.getByName(this.fileConfig.getServer()), 9987);
                 teamspeakClient.connect(address, "", this.fileConfig.getConnectionTimeout());
-                logger.info("Waiting for the connected state");
+                Logger.info("Waiting for the connected state");
                 teamspeakClient.waitForState(ClientConnectionState.CONNECTED, 5000L);
             } catch (IOException | TimeoutException | InterruptedException e) {
-                logger.info("Can't connect to the given host. Check IP");
-                //System.exit(0);
+                Logger.info("Can't connect to the given host. Check IP");
+                Thread.currentThread().interrupt();
             }
 
-            logger.info("Successfully connected to the server");
+            Logger.info("Successfully connected to the server");
 
             try {
                 teamspeakClient.subscribeAll();
             } catch (IOException | CommandException | TimeoutException | InterruptedException e) {
-                logger.info("Unable to subscribe the channels. " +
+                Logger.info("Unable to subscribe the channels. " +
                         "Please check the permissions of the group which the bot currently owns");
+                Thread.currentThread().interrupt();
             }
 
             try {
                 teamspeakClient.setDescription("I am only a bot. Don't trust me. Best regards your bot <3");
             } catch (CommandException | IOException | ExecutionException | InterruptedException | TimeoutException e) {
-                logger.info("Unable to set the description of the bot");
+                Logger.info("Unable to set the description of the bot");
+                Thread.currentThread().interrupt();
             }
 
             try {
                 teamspeakClient.joinChannel(this.fileConfig.getDefaultChannel(),"");
             } catch (CommandException e) {
-                logger.info("There is no channel that matches with the channel id. Joining base channel");
+                Logger.info("There is no channel that matches with the channel id. Joining base channel");
             } catch (IOException | InterruptedException | TimeoutException e) {
-                logger.info("Unable to join default channel. Check the given id in the config file");
+                Logger.info("Unable to join default channel. Check the given id in the config file");
+                Thread.currentThread().interrupt();
             }
 
 
@@ -164,13 +159,13 @@ public class Batoidea implements IBot {
 
             setState(BotState.RUNNING);
 
-            this.clientProvider = new ClientProvider(logger, teamspeakClient);
+            this.clientProvider = new ClientProvider(teamspeakClient);
             this.interactionFactory = new InteractionFactory(teamspeakClient);
 
             this.botInteraction = new BatoideaInteraction(teamspeakClient, botID);
             onLoad();
             teamspeakClient.addListener(new TeamSpeakListener(this, commandManager, userService));
-            teamspeakClient.addListener(new ClientListener(clientProvider, userService, logger, botID));
+            teamspeakClient.addListener(new ClientListener(clientProvider, userService, botID));
             registerCommands();
         }
 
@@ -194,16 +189,10 @@ public class Batoidea implements IBot {
         try {
             for (Client client : teamspeakClient.listClients()) {
                 var current = teamspeakClient.getClientInfo(client.getId());
-                if (current.isInServerGroup(BOT_GROUP)) {
-                    logger.info("Ignoring client: " + client.getNickname() + " because it is a bot");
+                if (current.isInServerGroup(BOT_GROUP) || current.isInServerGroup(BOT_MUSIC_GROUP)) {
+                    Logger.info("Ignoring client: {} because it is a bot", client.getNickname());
                     continue;
                 }
-
-                if (current.isInServerGroup(BOT_MUSIC_GROUP)) {
-                    logger.info("Ignoring client: " + client.getNickname() + " because it is a bot");
-                    continue;
-                }
-
                 clientProvider.add(client);
             }
 
@@ -211,11 +200,12 @@ public class Batoidea implements IBot {
                 channelProvider.add(channel);
             }
         } catch (IOException | TimeoutException | InterruptedException | CommandException e) {
-            logger.warning("Unable to fetch updates");
+            Logger.warn("Unable to fetch updates");
+            Thread.currentThread().interrupt();
         }
 
-        logger.info("Added " + channelProvider.getChannels().size() + " Channels");
-        logger.info("Added " + clientProvider.getSize() + " Clients");
+        Logger.info("Added {} channels", channelProvider.getChannels().size());
+        Logger.info("Added {} Clients", clientProvider.getClients().size());
     }
 
     @Override
@@ -223,7 +213,7 @@ public class Batoidea implements IBot {
         synchronized (stateLock) {
             if (getState() != BotState.RUNNING) throw new IllegalStateException(state.name());
 
-            logger.info("Shutting down...");
+            Logger.info("Shutting down...");
 
             setState(BotState.STOPPING);
 
@@ -232,11 +222,12 @@ public class Batoidea implements IBot {
                     teamspeakClient.disconnect("Requested disconnect via console! (no)");
                 } catch (IOException | TimeoutException | ExecutionException | InterruptedException exception) {
                     exception.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
 
             setState(BotState.STOPPED);
-            logger.info("Shutdown complete");
+            Logger.info("Shutdown complete");
         }
         System.exit(0);
     }
@@ -246,6 +237,7 @@ public class Batoidea implements IBot {
         return teamspeakClient.isConnected();
     }
 
+    @Override
     public boolean isStopping() {
         return stopping;
     }
@@ -254,7 +246,7 @@ public class Batoidea implements IBot {
     public void setState(@NotNull BotState state) {
         if (state == this.state) return;
         synchronized (this.stateLock) {
-            logger.info("Change state " + this.state + " -> " + state);
+            Logger.info("Change state {} -> {}", this.state, state);
             if (state == BotState.RUNNING) {
                 this.started = new Date(System.currentTimeMillis());
             }
@@ -264,12 +256,7 @@ public class Batoidea implements IBot {
     }
 
     @Override
-    public Logger getLogger() {
-        return logger;
-    }
-
-    @Override
-    public BotState getState() {
+    public @NotNull BotState getState() {
         return state;
     }
 
@@ -279,27 +266,27 @@ public class Batoidea implements IBot {
     }
 
     @Override
-    public BotInteraction getBotInteraction() {
+    public @NotNull BotInteraction getBotInteraction() {
         return botInteraction;
     }
 
     @Override
-    public IUserService getUserService() {
+    public @NotNull IUserService<TeamSpeakUser> getUserService() {
         return userService;
     }
 
     @Override
-    public IClientProvider getClientProvider() {
+    public @NotNull IClientProvider getClientProvider() {
         return clientProvider;
     }
 
     @Override
-    public IChannelProvider getChannelProvider() {
-        return null;
+    public @NotNull IChannelProvider getChannelProvider() {
+        return channelProvider;
     }
 
     @Override
-    public ServiceRegistry getServiceRegistry() {
+    public @NotNull ServiceRegistry getServiceRegistry() {
         return serviceRegistry;
     }
 
@@ -308,7 +295,7 @@ public class Batoidea implements IBot {
     }
 
     @Override
-    public AbstractInteractionFactory getInteractionFactory() {
+    public @NotNull AbstractInteractionFactory getInteractionFactory() {
         return interactionFactory;
     }
 
@@ -321,9 +308,8 @@ public class Batoidea implements IBot {
      * Returns the implementation for the {@link PropertyEventCall}.
      * @return the given instance
      */
-
     @Override
-    public PropertyEventCall getPropertyEventCall() {
+    public @NotNull PropertyEventCall getPropertyEventCall() {
         return propertyEventCall;
     }
 
@@ -331,19 +317,18 @@ public class Batoidea implements IBot {
      * Returns the implementation from the {@link CommandManager}.
      * @return the given instance
      */
-
     @Override
-    public CommandManagerImpl getCommandManager() {
+    public @NotNull CommandManagerImpl getCommandManager() {
         return commandManager;
     }
 
     @Override
     public @NotNull BotConfig getConfig() {
-        return null;
+        return config;
     }
 
     @Override
     public @NotNull UUID getUUID() {
-        return null;
+        return uuid;
     }
 }

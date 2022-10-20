@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.database;
+package net.theevilreaper.batoidea.database;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -158,7 +158,6 @@ public class RedisEventManager implements IRedisEventManager {
                 }
             });
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
-            //TODO: Check result in the log
             logger.warning(exception.getLocalizedMessage());
         }
     }

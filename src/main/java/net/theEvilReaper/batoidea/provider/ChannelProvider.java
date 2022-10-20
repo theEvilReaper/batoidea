@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.provider;
+package net.theevilreaper.batoidea.provider;
 
 import com.github.manevolent.ts3j.api.Channel;
 import net.theevilreaper.bot.api.provider.IChannelProvider;
@@ -33,22 +33,6 @@ public class ChannelProvider implements IChannelProvider {
             this.channels.remove(channelID);
         } finally {
             lock.unlock();
-        }
-    }
-
-    @Override
-    public Channel recognizeChannel(@NotNull Channel channel) {
-        try {
-            lock.lock();
-            var teamSpeakChannel = this.channels.get(channel.getId());
-
-            if (teamSpeakChannel == null) {
-                channels.put(channel.getId(), channel);
-            }
-
-            return teamSpeakChannel;
-        } finally {
-             lock.unlock();
         }
     }
 

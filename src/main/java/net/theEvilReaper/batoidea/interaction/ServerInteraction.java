@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.interaction;
+package net.theevilreaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
@@ -25,6 +25,7 @@ public record ServerInteraction(LocalTeamspeakClientSocket clientSocket) impleme
             this.clientSocket.sendServerMessage(message);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

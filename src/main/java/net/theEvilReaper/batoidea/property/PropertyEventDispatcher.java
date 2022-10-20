@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.property;
+package net.theevilreaper.batoidea.property;
 
 import net.theevilreaper.bot.api.property.PropertyEventCall;
 import net.theevilreaper.bot.api.util.Conditions;

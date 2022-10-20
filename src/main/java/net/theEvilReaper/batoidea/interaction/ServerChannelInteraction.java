@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.interaction;
+package net.theevilreaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.api.Permission;
 import com.github.manevolent.ts3j.command.CommandException;
@@ -16,7 +16,6 @@ import java.util.concurrent.TimeoutException;
  * @version 1.0.0
  * @since 1.0.0
  **/
-
 public record ServerChannelInteraction(LocalTeamspeakClientSocket socket) implements ChannelInteraction {
 
     @Override
@@ -26,6 +25,7 @@ public record ServerChannelInteraction(LocalTeamspeakClientSocket socket) implem
             socket.sendChannelMessage(channelID, message);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -35,6 +35,7 @@ public record ServerChannelInteraction(LocalTeamspeakClientSocket socket) implem
             socket.joinChannel(channelID, password);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -44,6 +45,7 @@ public record ServerChannelInteraction(LocalTeamspeakClientSocket socket) implem
             socket.channelAddPermission(channelID, permissions);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -53,6 +55,7 @@ public record ServerChannelInteraction(LocalTeamspeakClientSocket socket) implem
             socket.channelClientAddPermission(channelID, clientDatabaseID, permissions);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -62,6 +65,7 @@ public record ServerChannelInteraction(LocalTeamspeakClientSocket socket) implem
             socket.channelClientDeletePermission(channelID, clientDatabaseID, permissions);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

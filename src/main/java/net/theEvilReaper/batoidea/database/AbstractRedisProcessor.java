@@ -1,8 +1,9 @@
-package net.theEvilReaper.batoidea.database;
+package net.theevilreaper.batoidea.database;
 
 import net.theevilreaper.bot.api.database.RedisConnector;
 import net.theevilreaper.bot.api.database.RedisProcessor;
 import net.theevilreaper.bot.api.database.model.RedisModel;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author theEvilReaper
@@ -14,7 +15,7 @@ public abstract class AbstractRedisProcessor<K, V extends RedisModel> implements
 
     protected final RedisConnector redisConnector;
 
-    protected AbstractRedisProcessor(RedisConnector redisConnector) {
+    protected AbstractRedisProcessor(@NotNull RedisConnector redisConnector) {
         this.redisConnector = redisConnector;
     }
 }

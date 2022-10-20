@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.logging;
+package net.theevilreaper.batoidea.logging;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,16 +17,12 @@ import java.util.logging.SimpleFormatter;
  * @version 1.0.0
  * @since 1.0.0
  **/
-
+@Deprecated(forRemoval = true, since = "Use the logger from TinyLogger instead")
 public class BotLogger extends Logger {
 
     public BotLogger() {
         super("BotLogger", null);
-
         setLevel(Level.ALL);
-
-        // setUseParentHandlers(true);
-
         Path logsFolder = Paths.get("logs");
         try {
             Files.createDirectories(logsFolder);
@@ -47,8 +43,8 @@ public class BotLogger extends Logger {
     }
 
     @Override
-    public void log(LogRecord record) {
-        record.setMessage(record.getMessage());
-        super.log(record);
+    public void log(LogRecord aRecord) {
+        aRecord.setMessage(aRecord.getMessage());
+        super.log(aRecord);
     }
 }

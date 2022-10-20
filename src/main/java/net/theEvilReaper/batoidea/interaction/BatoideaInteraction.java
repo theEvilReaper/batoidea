@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.interaction;
+package net.theevilreaper.batoidea.interaction;
 
 import com.github.manevolent.ts3j.command.CommandException;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
@@ -22,6 +22,7 @@ public record BatoideaInteraction(@NotNull LocalTeamspeakClientSocket socket, in
             socket.sendChannelMessage(socket.getClientInfo(botID).getChannelId(), message);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -31,6 +32,7 @@ public record BatoideaInteraction(@NotNull LocalTeamspeakClientSocket socket, in
             socket.clientPoke(clientID, message);
         } catch (IOException | CommandException | InterruptedException | TimeoutException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -41,6 +43,7 @@ public record BatoideaInteraction(@NotNull LocalTeamspeakClientSocket socket, in
                 socket.joinChannel(channelId, null);
         } catch (IOException | TimeoutException | InterruptedException | CommandException exception) {
             exception.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

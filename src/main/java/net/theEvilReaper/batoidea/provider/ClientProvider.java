@@ -1,4 +1,4 @@
-package net.theEvilReaper.batoidea.provider;
+package net.theevilreaper.batoidea.provider;
 
 import com.github.manevolent.ts3j.api.Client;
 import com.github.manevolent.ts3j.protocol.socket.client.LocalTeamspeakClientSocket;
@@ -7,6 +7,7 @@ import com.google.common.cache.CacheBuilder;
 import net.theevilreaper.bot.api.provider.IClientProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.tinylog.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,19 +16,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
 
 public class ClientProvider implements IClientProvider {
 
-    private final Logger logger;
     private final LocalTeamspeakClientSocket socket;
     private final Map<Integer, Client> clientMap;
     private final Cache<Integer, Client> clientCache;
     private final Cache<String, Client> clientIdentifierCache;
     private final Lock lock;
 
-    public ClientProvider(Logger logger, LocalTeamspeakClientSocket socket) {
-        this.logger = logger;
+    public ClientProvider(@NotNull LocalTeamspeakClientSocket socket) {
         this.socket = socket;
         this.clientMap = new HashMap<>();
         this.lock = new ReentrantLock();
@@ -42,7 +40,7 @@ public class ClientProvider implements IClientProvider {
     @Override
     public void add(@NotNull Client client) {
         if (Objects.requireNonNull(this.clientMap.putIfAbsent(client.getId(), client)).getDatabaseId() == client.getDatabaseId()) {
-            logger.info("Add client with name= " + client.getNickname() + " and id=" + client.getDatabaseId());
+            Logger.info("Add client with name= {} and id={}", client.getNickname(), client.getDatabaseId());
         }
     }
 
@@ -73,20 +71,6 @@ public class ClientProvider implements IClientProvider {
     }
 
     @Override
-    public Client recognizeClient(@NotNull Client client) {
-        try {
-            lock.lock();
-            var teamspeakClient = findClient(client);
-            if (teamspeakClient == null) {
-                this.clientMap.put(client.getId(), client);
-            }
-            return teamspeakClient;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
     public Client getClientByUniqueIdentifier(@NotNull String identifier) {
         try {
             return clientIdentifierCache.get(identifier, () -> {
@@ -97,7 +81,7 @@ public class ClientProvider implements IClientProvider {
                             client = getClientById(client.getId());
                         }
 
-                        logger.fine(client.getNickname() + " => " + client.getUniqueIdentifier() + " ? " + identifier);
+                        Logger.info("{} => {} ?", client.getNickname(), client.getUniqueIdentifier(), identifier);
 
                         if (client.getUniqueIdentifier().equals(identifier)) {
                             return client;
@@ -114,7 +98,7 @@ public class ClientProvider implements IClientProvider {
         return null;
     }
 
-    public Client findClient(Client client) {
+    public Client findClient(@NotNull Client client) {
         return clientMap.get(client.getId());
     }
 
